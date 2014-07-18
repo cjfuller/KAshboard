@@ -6,9 +6,29 @@ var RCSS = require("rcss");
 var listStyle = {
     paddingLeft: "20px",
     paddingBottom: "3px",
+    display: "none",
 }
 
-listStyleClass = RCSS.registerClass(listStyle);
+var ghWidgetStyle = {
+    color: "#dddddd",
+}
+
+var numberStyle = {
+    fontSize: "10em",
+    textAlign: "center",
+    marginTop: "20px",
+}
+
+var captionStyle = {
+    fontSize: "2em",
+    textAlign: "center",
+    marginTop: "20px",
+}
+
+var listStyleClass = RCSS.registerClass(listStyle);
+var ghStyleClass = RCSS.registerClass(ghWidgetStyle);
+var numberClass = RCSS.registerClass(numberStyle);
+var captionClass = RCSS.registerClass(captionStyle);
 
 var GHWidget = React.createClass({
     getInitialState: function() {
@@ -116,9 +136,13 @@ var GHWidget = React.createClass({
             );
         });
         return (
-            <div className="gh-widget">
-                Hi, I'm a widget!  My name is { this.props.name }.
-                Number of times we've recently tested by crossing our fingers: { crossedFingerCount }
+            <div className={ghStyleClass.className}>
+                <div className={numberClass.className}>3</div>
+                <div className={captionClass.className}>
+                    number of recent commits tested by crossing fingers
+                </div>
+
+
                 {changeList}
             </div>
         );

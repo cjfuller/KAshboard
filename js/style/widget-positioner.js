@@ -1,14 +1,13 @@
-var RCSS = require('rcss');
-
 var gridSpacing = '15px';
 
-var widgetPositioner = {
+var WidgetPositionerStyle = {
     position: 'relative',
     marginTop: gridSpacing,
     marginLeft: gridSpacing,
     border: '2px solid black',
-    width: '600px',
-    height: '600px',
-}
+    width: '400px',
+    height: '400px',
+    backgroundColor: "#336600",
+};
 
-module.exports = RCSS.registerClass(widgetPositioner);
+module.exports = WidgetPositionerStyle
