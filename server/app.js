@@ -11,6 +11,8 @@ app.use(cors());
 
 var https = require('https');
 
+var gapi = require('googleapis');
+
 app.get('/github', function(req, res){
     var options = {
         hostname: 'api.github.com',
@@ -28,6 +30,35 @@ app.get('/github', function(req, res){
         response.on('end', function(chunk) {
             res.send(JSON.parse(str));
         });
+    });
+});
+
+// BigQuery stuff...
+// TODO(tony): prefix all this with "BQ" to avoid confusion
+var projectNumber = secrets.bqProjectNumber;
+var clientId = secrets.bqClientId;
+
+function auth() {
+    var config = {
+        'client_id': clientId,
+        'scope': 'https://www.googleapis.com/auth/bigquery',
+    };
+    gapi.auth.authorize(config, function() {
+        gapi.client.load('bigquery', 'v2');
+    });
+};
+
+// List tables
+app.get('/bq-list', function(req, res) {
+    // TODO(tony): order?
+    auth();
+
+    var request = gapi.client.bigquery.datasets.list({
+        'projectId': projectNumber
+    });
+
+    request.execute(function(response) {
+        res.send(JSON.stringify(response.result.datasets, null));
     });
 });
 
