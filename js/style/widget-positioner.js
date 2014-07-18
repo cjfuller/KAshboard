@@ -12,7 +12,6 @@ var widgetStyleBase = {
     position: 'relative',
     marginTop: gridSpacing + 'px',
     marginLeft: gridSpacing + 'px',
-    backgroundColor: "#336600",
     float: 'left',
     width: baseComponentSize + 'px',
     height: baseComponentSize + 'px',
