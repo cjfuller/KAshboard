@@ -37,6 +37,7 @@ var ChangelistWidget = React.createClass({
                 </div>
                 <div className={styles.changelistClass.className}>
                     {changeList}
+                    <strong>+{this.props.nRecent} more</strong>
                 </div>
             </div>
         );
@@ -48,10 +49,6 @@ var GHWidget = React.createClass({
         return {data: []};
     },
     getCommitData: function() {
-        // TODO(colin): github forces pagination of 30 events per page.  Fetch
-        // more as needed up to some time cutoff.
-        // TODO(colin): github sends back a max allowed polling interval in the
-        // headers.  We should read this and check against it when updating.
         $.ajax({
             type: "GET",
             url: "http://localhost:3000/github",
@@ -89,7 +86,7 @@ var GHWidget = React.createClass({
         
         // Get first line of commit message
         var shortMessage = message.split("\n")[0];
-        
+    
         return {
             name: displayName,
             text: shortMessage,
@@ -102,7 +99,14 @@ var GHWidget = React.createClass({
         var changelog = _.map(this.state.data, function(c) {
                 return this.extractChanges(c);
             }.bind(this));
-            
+        
+        var recentCommitCount = _.filter(this.state.data, function(d) {
+            var dayMs = 86400000;
+            console.log(Date.now());
+            console.log(new Date(d.commit.author.date).getTime());
+            return (Date.now() - (new Date(d.commit.author.date)).getTime() < dayMs);
+        }).length;
+        
         var crossedFingerCount = _.reduce(this.state.data,
             function(count, commit) {
                 var lc = commit.commit.message.toLowerCase();
@@ -125,11 +129,14 @@ var GHWidget = React.createClass({
         changelog = _.reject(changelog, function(c) {
             return c === null;
         });
+        
+        changelog = _.first(changelog, 6);
 
         return (
             <div className={styles.ghStyleClass.className}>
                 <WidgetContainer>
-                    <ChangelistWidget changelog={changelog}/>
+                    <ChangelistWidget changelog={changelog} 
+                        nRecent={recentCommitCount}/>
                 </WidgetContainer>
                 <WidgetContainer>
                     <FingersCrossedWidget fingerCount={crossedFingerCount}/>

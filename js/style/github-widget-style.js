@@ -1,7 +1,6 @@
 var RCSS = require('rcss');
 
 var listStyle = {
-    paddingLeft: "20px",
     paddingRight: "20px",
     paddingBottom: "15px",
 }
@@ -31,7 +30,8 @@ var titleStyle = {
 
 var changelistStyle = {
     fontSize: "0.8em",
-    paddingTop: "10px"
+    paddingTop: "10px",
+    paddingLeft: "20px"
 }
 
 module.exports = {
