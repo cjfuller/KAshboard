@@ -128,7 +128,7 @@ var GHWidget = React.createClass({
             return c === null;
         });
         
-        changelog = _.first(changelog, 6);
+        changelog = _.first(changelog, 5);
 
         return (
             <div className={styles.ghStyleClass.className}>

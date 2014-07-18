@@ -16,16 +16,18 @@ var numberStyle = {
 }
 
 var captionStyle = {
-    fontSize: "2em",
+    fontSize: "1.8em",
     textAlign: "center",
-    marginTop: "20px",
+    marginTop: "10px",
 }
 
 var titleStyle = {
-    fontSize: "2em",
+    fontSize: "1.8em",
     marginTop: "10px",
     marginBottom: "10px",
-    paddingLeft: "10px",
+    marginLeft: "10px",
+    marginRight: "10px",
+    fontWeight: "bold",
 }
 
 var changelistStyle = {
