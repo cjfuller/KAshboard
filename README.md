@@ -16,7 +16,7 @@ Server will start at [http://localhost:9966/](http://localhost:9966/).
 Render the `LoadingMessage` component (`loading-message.jsx`) if the widget
 content has not yet loaded.
 
-```js
+```
 return <div>
     <LoadingMessage />
 </div>;
