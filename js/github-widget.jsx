@@ -5,6 +5,7 @@ var RCSS = require("rcss");
 var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 var styles = require("./style/github-widget-style.js");
+var kaColors = require("./style/ka-colors.js");
 
 // Refresh rate, in milliseconds
 var INTERVAL_MS = 30000;
@@ -153,7 +154,7 @@ var GHWidget = React.createClass({
                     <ChangelistWidget changelog={changelog} 
                         nRecent={recentCommitCount}/>
                 </WidgetContainer>
-                <WidgetContainer>
+                <WidgetContainer color={kaColors.humanitiesDomainColor}>
                     <FingersCrossedWidget fingerCount={crossedFingerCount}/>
                 </WidgetContainer>
             </div>
