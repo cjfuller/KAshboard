@@ -16,13 +16,12 @@ var gapi = require('googleapis');
 app.get('/github', function(req, res){
     var options = {
         hostname: 'api.github.com',
-        path: '/repos/Khan/webapp/events',
+        path: '/repos/Khan/webapp/commits',
         auth: secrets.githubToken + ':x-oauth-basic',
         headers: {
             'user-agent': USER_AGENT
         }
     };
-    console.log(options);
     https.get(options, function(response) {
         var str = '';
         response.on('data', function(chunk) {

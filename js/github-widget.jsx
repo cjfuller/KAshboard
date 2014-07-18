@@ -57,14 +57,7 @@ var GHWidget = React.createClass({
             url: "http://localhost:3000/github",
             dataType: 'json',
             success: function(data) {
-                var commits = [];
-                _.each(data, function(d) {
-                    if (d.type === "PushEvent" &&
-                        d.payload.ref === "refs/heads/master") {
-                        commits = commits.concat(d.payload.commits);
-                    }
-                });
-                this.setState({data: commits});
+                this.setState({data: data});
             }.bind(this),
         });
     },
@@ -74,8 +67,9 @@ var GHWidget = React.createClass({
     },
 
     extractChanges: function(commit) {
-        var name = commit.author.name;
-        var message = commit.message;
+        console.log(commit);
+        var name = commit.commit.author.name;
+        var message = commit.commit.message;
         
         // Drop the commit if jenkins is the author or [auto] is in the 
         // message.
@@ -122,7 +116,7 @@ var GHWidget = React.createClass({
             
         var crossedFingerCount = _.reduce(this.state.data,
             function(count, commit) {
-                var lc = commit.message.toLowerCase();
+                var lc = commit.commit.message.toLowerCase();
                 var crossedFingersMessages = [
                     "cross fingers",
                     "crossed fingers",

@@ -7,7 +7,7 @@
     "dependencies": {
         "cors": "2.4.x",
         "express": "4.6.x",
-        "googleapis": "0.8.x",
+        "googleapis": "0.8.x"
     },
     "devDependencies": {
         "beefy": "2.0.x",
