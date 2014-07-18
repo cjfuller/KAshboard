@@ -32,7 +32,7 @@ var titleStyle = {
 }
 
 var changelistStyle = {
-    fontSize: "0.8em",
+    fontSize: "0.95em",
     paddingTop: "10px",
     paddingLeft: "20px"
 }
