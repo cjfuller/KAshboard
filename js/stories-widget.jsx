@@ -7,42 +7,51 @@ var LoadingMessage = require("./loading-message.jsx");
 // Number of latest stories to get
 var STORIES_COUNT = 20;
 
+// Time to show each story, in milliseconds
+var INTERVAL_MS = 10000;
+
 /**
- * Renders one of the latest STORIES_COUNT stories on KA.
+ * Cycles through the latest STORIES_COUNT stories on KA.
  */
 StoriesWidget = React.createClass({
     getInitialState: function() {
         return {
-            name: "",
-            date: "",
-            teaser: ""
+            stories: [],
+            currentIdx: 0
         };
+    },
+
+    renderNextStory: function() {
+        var nextIdx = (this.state.currentIdx + 1) % this.state.stories.length;
+        this.setState({currentIdx: nextIdx});
     },
 
     componentDidMount: function() {
         $.get("http://www.khanacademy.org/api/v1/stories",
               {count: STORIES_COUNT, casing: "camel"},
               function(result) {
-            var randIdx = Math.floor(Math.random() * STORIES_COUNT);
-            var story = result.stories[randIdx];
-            this.setState({
-                name: story.name,
-                date: story.formattedDate,
-                teaser: story.teaser
-            });
+            this.setState({stories: result.stories});
+            this.interval = setInterval(this.renderNextStory, INTERVAL_MS);
         }.bind(this));
     },
 
+    componentWillUnmount: function() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
+    },
+
     render: function() {
-        if (!this.state.name) {
+        if (this.state.stories.length === 0) {
             return <div>
                 <LoadingMessage />
             </div>;
         }
+        var story = this.state.stories[this.state.currentIdx];
         return <div>
-            <p>{this.state.name}</p>
-            <p>{this.state.date}</p>
-            <p>{this.state.teaser}</p>
+            <p>{story.name}</p>
+            <p>{story.formattedDate}</p>
+            <p>{story.story}</p>
         </div>;
     }
 });
