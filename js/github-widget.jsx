@@ -6,6 +6,8 @@ var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 var styles = require("./style/github-widget-style.js");
 
+// Refresh rate, in milliseconds
+var INTERVAL_MS = 30000;
 
 var FingersCrossedWidget = React.createClass({
     render: function() {
@@ -62,6 +64,13 @@ var GHWidget = React.createClass({
 
     componentDidMount: function() {
         this.getCommitData();
+        this.interval = setInterval(this.getCommitData, INTERVAL_MS);
+    },
+
+    componentWillUnmount: function() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
     },
 
     extractChanges: function(commit) {
