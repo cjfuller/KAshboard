@@ -1,17 +1,17 @@
 /** @jsx React.DOM */
 
 var React = require("react");
-window.React = React;
 
 var TestClass = require("./test.jsx");
 var GAWidget = require("./ga-widget.jsx");
 
-React.renderComponent(
-    <TestClass />,
-    document.getElementById('content')
-);
+var Dashboard = React.createClass({
+    render: function() {
+        return <div>
+            <TestClass />
+            <GAWidget name="Analytics Ape" />
+        </div>;
+    }
+});
 
-React.renderComponent(
-    <GAWidget name="Analytics Ape"/>,
-    document.getElementById('content')
-);
+module.exports = Dashboard;
