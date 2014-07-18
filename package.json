@@ -9,11 +9,8 @@
         "browserify": "4.2.x",
         "react": "0.11.x",
         "reactify": "0.14.x",
-<<<<<<< HEAD
         "react": "0.11.x",
-        "underscore": "1.6.x"
-=======
+        "underscore": "1.6.x",
         "watchify": "0.10.x"
->>>>>>> master
     }
 }
