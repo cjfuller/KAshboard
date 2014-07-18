@@ -1,6 +1,14 @@
 /** @jsx React.DOM */
 var React = require("react");
 var _ = require("underscore");
+var RCSS = require("rcss");
+
+var listStyle = {
+    paddingLeft: "20px",
+    paddingBottom: "3px",
+}
+
+listStyleClass = RCSS.registerClass(listStyle);
 
 var GHWidget = React.createClass({
     getInitialState: function() {
@@ -102,18 +110,16 @@ var GHWidget = React.createClass({
         });
         var changeList = _.map(changelog, function(c) {
             return (
-                <li key={c.key}>
+                <div key={c.key} className={listStyleClass.className}>
                     {c.text}
-                </li>
+                </div>
             );
         });
         return (
             <div className="gh-widget">
                 Hi, I'm a widget!  My name is { this.props.name }.
                 Number of times we've recently tested by crossing our fingers: { crossedFingerCount }
-                <ul>
-                    {changeList}
-                </ul>
+                {changeList}
             </div>
         );
     },
