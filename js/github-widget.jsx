@@ -8,6 +8,10 @@ var GHWidget = React.createClass({
         return {data: []};
     },
     getCommitData: function() {
+        // TODO(colin): github forces pagination of 30 events per page.  Fetch
+        // more as needed up to some time cutoff.
+        // TODO(colin): github sends back a max allowed polling interval in the
+        // headers.  We should read this and check against it when updating.
         var url = "https://api.github.com/repos/Khan/webapp/events";
         $.ajax({
             type: "GET",
@@ -20,7 +24,8 @@ var GHWidget = React.createClass({
             success: function(data) {
                 var commits = [];
                 _.each(data, function(d) {
-                    if (d.payload.commits) {
+                    if (d.type === "PushEvent" &&
+                        d.payload.ref === "refs/heads/master") {
                         commits = commits.concat(d.payload.commits);
                     }
                 });
@@ -44,7 +49,6 @@ var GHWidget = React.createClass({
         if (name === jenkins || message.match("\\[auto\\]") ||
                 message.match(jenkins) ||
                 message.match(merge)) {
-            console.log("returning null for: " + name + " " + message);
             return null;
         }
         
@@ -68,7 +72,10 @@ var GHWidget = React.createClass({
             shortMessage = message.substr(0, fallbackMaxChars);
         }
         
-        return displayName + ": " + shortMessage;
+        return {
+            text: displayName + ": " + shortMessage,
+            key: commit.sha.substr(0, 8)
+        };
         
         
     },
@@ -101,8 +108,8 @@ var GHWidget = React.createClass({
         });
         var changeList = _.map(changelog, function(c) {
             return (
-                <li>
-                    {c}
+                <li key={c.key}>
+                    {c.text}
                 </li>
             );
         });
