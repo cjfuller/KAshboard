@@ -2,6 +2,7 @@
 var React = require("react");
 var _ = require("underscore");
 var RCSS = require("rcss");
+var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 var styles = require("./style/github-widget-style.js");
 
@@ -96,6 +97,13 @@ var GHWidget = React.createClass({
         
     },
     render: function() {
+        if (this.state.data.length === 0) {
+            return <div className={styles.ghStyleClass.className}>
+                <WidgetContainer><LoadingMessage /></WidgetContainer>
+                <WidgetContainer><LoadingMessage /></WidgetContainer>
+            </div>;
+        }
+
         var changelog = _.map(this.state.data, function(c) {
                 return this.extractChanges(c);
             }.bind(this));
