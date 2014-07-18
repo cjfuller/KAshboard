@@ -4,6 +4,10 @@
     "scripts": {
         "start": "./node_modules/.bin/beefy js/main.jsx:js/main.js -- -t reactify"
     },
+    "dependencies": {
+        "cors": "2.4.x",
+        "express": "4.6.x"
+    },
     "devDependencies": {
         "beefy": "2.0.x",
         "browserify": "4.2.x",

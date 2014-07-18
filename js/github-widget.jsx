@@ -12,15 +12,10 @@ var GHWidget = React.createClass({
         // more as needed up to some time cutoff.
         // TODO(colin): github sends back a max allowed polling interval in the
         // headers.  We should read this and check against it when updating.
-        var url = "https://api.github.com/repos/Khan/webapp/events";
         $.ajax({
             type: "GET",
-            url: url,
+            url: "http://localhost:3000/github",
             dataType: 'json',
-            headers: {
-                "Authorization":
-                    "Basic " + btoa(GHToken.token + ":" + GHToken.pw)
-            },
             success: function(data) {
                 var commits = [];
                 _.each(data, function(d) {
