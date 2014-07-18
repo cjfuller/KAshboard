@@ -3,54 +3,17 @@ var React = require("react");
 var _ = require("underscore");
 var RCSS = require("rcss");
 var WidgetContainer = require("./widget-container.jsx");
+var styles = require("./style/github-widget-style.js");
 
-var listStyle = {
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    paddingBottom: "15px",
-}
-
-var ghWidgetStyle = {
-    color: "#dddddd",
-}
-
-var numberStyle = {
-    fontSize: "10em",
-    textAlign: "center",
-    marginTop: "20px",
-}
-
-var captionStyle = {
-    fontSize: "2em",
-    textAlign: "center",
-    marginTop: "20px",
-}
-
-var titleStyle = {
-    fontSize: "2em",
-    marginTop: "10px",
-    marginBottom: "10px",
-    paddingLeft: "10px",
-}
-
-var changelistStyle = {
-    fontSize: "0.8em",
-    paddingTop: "10px"
-}
-
-var listStyleClass = RCSS.registerClass(listStyle);
-var ghStyleClass = RCSS.registerClass(ghWidgetStyle);
-var numberClass = RCSS.registerClass(numberStyle);
-var captionClass = RCSS.registerClass(captionStyle);
-var titleClass = RCSS.registerClass(titleStyle);
-var changelistClass = RCSS.registerClass(changelistStyle);
 
 var FingersCrossedWidget = React.createClass({
     render: function() {
         return (
-            <div className={ghStyleClass.className}>
-                <div className={numberClass.className}>{this.props.fingerCount}</div>
-                <div className={captionClass.className}>
+            <div className={styles.ghStyleClass.className}>
+                <div className={styles.numberClass.className}>
+                    {this.props.fingerCount}
+                </div>
+                <div className={styles.captionClass.className}>
                     number of recent commits tested by crossing fingers
                 </div>
             </div>
@@ -62,17 +25,17 @@ var ChangelistWidget = React.createClass({
     render: function() {
         var changeList = _.map(this.props.changelog, function(c) {
             return (
-                <div key={c.key} className={listStyleClass.className}>
+                <div key={c.key} className={styles.listStyleClass.className}>
                     <strong>{c.name}</strong>: {c.text}
                 </div>
             );
         });
         return (
             <div>
-                <div className={titleClass.className}>
+                <div className={styles.titleClass.className}>
                     Recent website changes
                 </div>
-                <div className={changelistClass.className}>
+                <div className={styles.changelistClass.className}>
                     {changeList}
                 </div>
             </div>
@@ -181,12 +144,12 @@ var GHWidget = React.createClass({
         });
 
         return (
-            <div className={ghStyleClass.className}>
+            <div className={styles.ghStyleClass.className}>
                 <WidgetContainer>
                     <ChangelistWidget changelog={changelog}/>
                 </WidgetContainer>
                 <WidgetContainer>
-                    <FingersCrossedWidget fingerCount="3"/>
+                    <FingersCrossedWidget fingerCount={crossedFingerCount}/>
                 </WidgetContainer>
             </div>
         );
