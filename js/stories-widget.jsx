@@ -35,7 +35,9 @@ StoriesWidget = React.createClass({
 
     render: function() {
         if (!this.state.name) {
-            return <LoadingMessage />;
+            return <div>
+                <LoadingMessage />
+            </div>;
         }
         return <div>
             <p>{this.state.name}</p>
