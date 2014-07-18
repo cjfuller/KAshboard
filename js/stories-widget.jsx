@@ -2,6 +2,8 @@
 
 var React = require("react");
 
+var LoadingMessage = require("./loading-message.jsx");
+
 // Number of latest stories to get
 var STORIES_COUNT = 20;
 
@@ -32,6 +34,9 @@ StoriesWidget = React.createClass({
     },
 
     render: function() {
+        if (!this.state.name) {
+            return <LoadingMessage />;
+        }
         return <div>
             <p>{this.state.name}</p>
             <p>{this.state.date}</p>
