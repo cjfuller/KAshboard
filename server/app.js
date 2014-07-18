@@ -22,6 +22,7 @@ app.get('/github', function(req, res){
             'user-agent': USER_AGENT
         }
     };
+    console.log(options);
     https.get(options, function(response) {
         var str = '';
         response.on('data', function(chunk) {

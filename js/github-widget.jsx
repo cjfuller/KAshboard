@@ -2,11 +2,12 @@
 var React = require("react");
 var _ = require("underscore");
 var RCSS = require("rcss");
+var WidgetContainer = require("./widget-container.jsx");
 
 var listStyle = {
     paddingLeft: "20px",
-    paddingBottom: "3px",
-    display: "none",
+    paddingRight: "20px",
+    paddingBottom: "15px",
 }
 
 var ghWidgetStyle = {
@@ -25,10 +26,59 @@ var captionStyle = {
     marginTop: "20px",
 }
 
+var titleStyle = {
+    fontSize: "2em",
+    marginTop: "10px",
+    marginBottom: "10px",
+    paddingLeft: "10px",
+}
+
+var changelistStyle = {
+    fontSize: "0.8em",
+    paddingTop: "10px"
+}
+
 var listStyleClass = RCSS.registerClass(listStyle);
 var ghStyleClass = RCSS.registerClass(ghWidgetStyle);
 var numberClass = RCSS.registerClass(numberStyle);
 var captionClass = RCSS.registerClass(captionStyle);
+var titleClass = RCSS.registerClass(titleStyle);
+var changelistClass = RCSS.registerClass(changelistStyle);
+
+var FingersCrossedWidget = React.createClass({
+    render: function() {
+        return (
+            <div className={ghStyleClass.className}>
+                <div className={numberClass.className}>{this.props.fingerCount}</div>
+                <div className={captionClass.className}>
+                    number of recent commits tested by crossing fingers
+                </div>
+            </div>
+        );
+    }
+})
+
+var ChangelistWidget = React.createClass({
+    render: function() {
+        var changeList = _.map(this.props.changelog, function(c) {
+            return (
+                <div key={c.key} className={listStyleClass.className}>
+                    <strong>{c.name}</strong>: {c.text}
+                </div>
+            );
+        });
+        return (
+            <div>
+                <div className={titleClass.className}>
+                    Recent website changes
+                </div>
+                <div className={changelistClass.className}>
+                    {changeList}
+                </div>
+            </div>
+        );
+    }
+});
 
 var GHWidget = React.createClass({
     getInitialState: function() {
@@ -95,7 +145,8 @@ var GHWidget = React.createClass({
         }
         
         return {
-            text: displayName + ": " + shortMessage,
+            name: displayName,
+            text: shortMessage,
             key: commit.sha.substr(0, 8)
         };
         
@@ -128,22 +179,15 @@ var GHWidget = React.createClass({
         changelog = _.reject(changelog, function(c) {
             return c === null;
         });
-        var changeList = _.map(changelog, function(c) {
-            return (
-                <div key={c.key} className={listStyleClass.className}>
-                    {c.text}
-                </div>
-            );
-        });
+
         return (
             <div className={ghStyleClass.className}>
-                <div className={numberClass.className}>3</div>
-                <div className={captionClass.className}>
-                    number of recent commits tested by crossing fingers
-                </div>
-
-
-                {changeList}
+                <WidgetContainer>
+                    <ChangelistWidget changelog={changelog}/>
+                </WidgetContainer>
+                <WidgetContainer>
+                    <FingersCrossedWidget fingerCount="3"/>
+                </WidgetContainer>
             </div>
         );
     },
