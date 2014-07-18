@@ -25,6 +25,9 @@ var Dashboard = React.createClass({
             <WidgetContainer>
                 <BigQueryWidget />
             </WidgetContainer>
+            <WidgetContainer>
+            Testing wrapping...
+            </WidgetContainer>
         </div>;
     }
 });

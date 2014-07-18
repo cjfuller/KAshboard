@@ -1,13 +1,15 @@
 /** @jsx React.DOM */
 var React = require("react");
 var RCSS = require("rcss");
-var widgetPositionerStyle = require("./style/widget-positioner.js");
-var widgetPositionerClass = RCSS.registerClass(widgetPositionerStyle);
+var widgetStyles = require("./style/widget-positioner.js");
 var WidgetContainer = React.createClass(
     {
         render: function() {
+            var widgetSizeClass = widgetStyles[this.props.sizeClass ||
+                'singleSize'];
+            
             return (
-                <div className={widgetPositionerClass.className}>
+                <div className={widgetSizeClass.className}>
                     {this.props.children}
                 </div>
             );

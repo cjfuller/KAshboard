@@ -1,5 +1,5 @@
 var RCSS = require("rcss");
-var styleVars = require("./global-style.js");
+var styleVars = require("./style-vars.js");
 
 var dashboardStyle = {
     fontFamily: styleVars.fontFamily,
