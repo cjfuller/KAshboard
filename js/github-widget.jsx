@@ -67,39 +67,28 @@ var GHWidget = React.createClass({
     },
 
     extractChanges: function(commit) {
-        console.log(commit);
         var name = commit.commit.author.name;
         var message = commit.commit.message;
         
         // Drop the commit if jenkins is the author or [auto] is in the 
         // message.
         var jenkins = "Jenny Jenkins";
-        var merge = "Merge";
+        var isMergeCommit = commit.parents.length > 1;
         if (name === jenkins || message.match("\\[auto\\]") ||
-                message.match(jenkins) ||
-                message.match(merge)) {
+                message.match(jenkins) || isMergeCommit) {
             return null;
         }
         
-        // Extract the first name, and the part of the commit before Summary:
-        var displayName = name.substr(0, name.indexOf(" "));
-        if (displayName.length === 0) {
-            displayName = name;
-        }
+        // Extract the first name
+        name = name.split(" ");
+        var displayName = name[0];
         //... unless it's a Ben.  Then use the last name.
-        if (displayName.match("^Ben")) {
-            displayName = "B. " + name.substr(name.indexOf(" ") + 1);
+        if (displayName.match("^Ben") && name[1]) {
+            displayName = "B. " + name[1];
         }
         
-        var summaryStart = message.indexOf("Summary:")
-        var fallbackMaxChars = 70;
-        var shortMessage = null;
-        
-        if (summaryStart > 0) {
-            shortMessage = message.substr(0, summaryStart);
-        } else {
-            shortMessage = message.substr(0, fallbackMaxChars);
-        }
+        // Get first line of commit message
+        var shortMessage = message.split("\n")[0];
         
         return {
             name: displayName,
