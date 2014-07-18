@@ -15,6 +15,7 @@ var widgetStyleBase = {
     float: 'left',
     width: baseComponentSize + 'px',
     height: baseComponentSize + 'px',
+    overflow: 'hidden',
 }
 
 var doubleWideWidget = _.defaults({
