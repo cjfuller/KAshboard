@@ -68,11 +68,7 @@ var LineGraph = React.createClass(
                 }
             };
             config.chart.renderTo = this.getDOMNode();
-            config.series = [{
-                name: "a line!",
-                type: "line",
-                data: [{x: 1, y: 3}, {x: 2, y: 7}, {x: 3, y:22}]
-            }];
+            config.series = this.props.series;
             config.chart.title = "Chart title!";
             config.yAxis.title = "It's a y-axis!";
             new Highcharts.Chart(config);
