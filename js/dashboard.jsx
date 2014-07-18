@@ -1,5 +1,11 @@
 /** @jsx React.DOM */
+
+var React = require("react");
+window.React = React;
+
+var TestClass = require("./test.jsx");
+
 React.renderComponent(
-    <h1>Hello, world!</h1>,
+    <TestClass />,
     document.getElementById('content')
 );

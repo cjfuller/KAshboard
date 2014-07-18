@@ -1,0 +1,13 @@
+{
+    "name": "dashboard-hack",
+    "version": "0.0.1",
+    "scripts": {
+        "start": "./node_modules/.bin/beefy js/dashboard.jsx:js/dashboard.js -- -t reactify"
+    },
+    "devDependencies": {
+        "beefy": "2.0.x",
+        "browserify": "4.2.x",
+        "reactify": "0.14.x",
+        "react": "0.11.x"
+    }
+}
