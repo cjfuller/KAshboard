@@ -1,4 +1,5 @@
 var RCSS = require('rcss');
+var colors = require('./ka-colors.js');
 
 var listStyle = {
     paddingRight: "20px",
@@ -6,7 +7,7 @@ var listStyle = {
 }
 
 var ghWidgetStyle = {
-    color: "#dddddd",
+    color: colors.grayExtraLight,
 }
 
 var numberStyle = {
