@@ -8,6 +8,7 @@ var WidgetPositionerStyle = {
     width: '400px',
     height: '400px',
     backgroundColor: "#336600",
+    float: 'left',
 };
 
 module.exports = WidgetPositionerStyle

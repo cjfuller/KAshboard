@@ -13,6 +13,9 @@ var WidgetContainer = require("./widget-container.jsx");
 var globalStyle = {
     fontFamily:
         'Avenir, sans-serif',
+    backgroundColor: '#333333',
+    width: "1920px",
+    height: "1080px",
 }
 
 var globalStyleClass = RCSS.registerClass(globalStyle);
