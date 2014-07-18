@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 var React = require("react");
 var _ = require("underscore");
-var GHToken = require("./gh-token");
 
 var GHWidget = React.createClass({
     getInitialState: function() {
