@@ -102,8 +102,6 @@ var GHWidget = React.createClass({
         
         var recentCommitCount = _.filter(this.state.data, function(d) {
             var dayMs = 86400000;
-            console.log(Date.now());
-            console.log(new Date(d.commit.author.date).getTime());
             return (Date.now() - (new Date(d.commit.author.date)).getTime() < dayMs);
         }).length;
         
