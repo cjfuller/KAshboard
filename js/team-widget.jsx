@@ -2,35 +2,51 @@
 
 var React = require("react");
 
+// Time to show each employee, in milliseconds
+var INTERVAL_MS = 10000;
+
 /**
  * Displays name and picture of a random member of the team.
- *
- * TODO(kevin): Implement this.
  */
 TeamWidget = React.createClass({
     getInitialState: function() {
         return {
-            name: "",
-            imageUrl: ""
+            team: [],
+            currentIdx: 0
         };
     },
 
+    displayRandomEmployee: function() {
+        var nextIdx = Math.floor(Math.random() * this.state.team.length);
+        this.setState({currentIdx: nextIdx});
+    },
+
     componentDidMount: function() {
-        this.setState({
-            name: "Toby",
-            imageUrl: "https://www.kastatic.org/images/headshots/toby.jpg"
-        });
+        $.get("http://localhost:3000/team", function(result) {
+            this.setState({team: result});
+            this.displayRandomEmployee();
+            this.interval = setInterval(this.displayRandomEmployee,
+                                        INTERVAL_MS);
+        }.bind(this));
+    },
+
+    componentWillUnmount: function() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
     },
 
     render: function() {
-        if (!this.state.name) {
+        if (this.state.team.length === 0) {
             return <div>
                 <LoadingMessage />
             </div>;
         }
+        var employee = this.state.team[this.state.currentIdx];
         return <div>
-            <p>{this.state.name}</p>
-            <img src={this.state.imageUrl} />
+            <p>{employee.name}</p>
+            <p>{employee.title}</p>
+            <img src={employee.imageUrl} />
         </div>;
     }
 });
