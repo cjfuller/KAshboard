@@ -55,6 +55,13 @@ app.get('/github', function(req, res){
 // BigQuery stuff...
 // TODO(tony): prefix all this with "BQ" to avoid confusion
 
+// cache recent queries so that we don't repeatedly run them when we're
+// refreshing the page frequently in development
+
+var queryCache = {};
+
+//TODO(colin): implement the cache
+
 //List tables
 app.get('/bq-list', function (req, res) {
     gapi.discover('bigquery', 'v2').execute(function(err, client) {
@@ -65,6 +72,33 @@ app.get('/bq-list', function (req, res) {
         });        
     });
 });
+
+// Execute a query
+// Sends err, results to the provided callback [optional].
+// Note that these results will be the response from bigquery and not the
+// actual computed results.
+var queryExec = function(query, destinationTable, callback) {
+    var dataset = "dashboard_stats";
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.jobs.insert({
+           projectId: secrets.bqProjectId});
+        req.body = {
+            projectId: secrets.bqProjectId,
+            configuration: {
+                query: {
+                    destinationTable: {
+                        projectId: secrets.bqProjectId,
+                        tableId: destinationTable,
+                        datasetId: dataset,
+                    },
+                    writeDisposition: "WRITE_TRUNCATE",
+                    query: query,
+                }
+            }
+        };
+        req.withAuthClient(oauth2Client).execute(callback);
+    });
+};
 
 // Get everyone on the team page
 app.get('/team', function(req, res) {
