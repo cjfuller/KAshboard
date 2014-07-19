@@ -15,7 +15,7 @@ var dashboardClass = require("./style/dashboard-style.js");
 var Dashboard = React.createClass({
     render: function() {
         return <div className={dashboardClass.className}>
-            <GHMetaWidget name="Github Gibbon"/>
+            <GHMetaWidget/>
             <StoriesWidget />
             <TeamWidget />
             <BigQueryWidget />
