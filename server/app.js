@@ -125,6 +125,11 @@ app.get('/at-all', function(req, res) {
 
         response.on('end', function(chunk) {
             var history = JSON.parse(str);
+            if (!history.items) {
+                // Likely an error with the proxy server or API access
+                res.send({});
+                return;
+            }
             for (var i = 0; i < history.items.length; i++) {
                 var item = history.items[i];
                 if (item.message.indexOf('@all') >= 0) {
