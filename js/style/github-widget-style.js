@@ -1,5 +1,6 @@
 var RCSS = require('rcss');
 var colors = require('./ka-colors.js');
+var vars = require('./style-vars.js');
 
 var listStyle = {
     paddingRight: "20px",
@@ -22,15 +23,6 @@ var captionStyle = {
     marginTop: "10px",
 }
 
-var titleStyle = {
-    fontSize: "1.8em",
-    marginTop: "10px",
-    marginBottom: "10px",
-    marginLeft: "10px",
-    marginRight: "10px",
-    fontWeight: "bold",
-}
-
 var changelistStyle = {
     fontSize: "0.95em",
     paddingTop: "10px",
@@ -42,6 +34,6 @@ module.exports = {
     ghStyleClass: RCSS.registerClass(ghWidgetStyle),
     numberClass: RCSS.registerClass(numberStyle),
     captionClass: RCSS.registerClass(captionStyle),
-    titleClass: RCSS.registerClass(titleStyle),
+    titleClass: RCSS.registerClass(vars.titleStyle),
     changelistClass: RCSS.registerClass(changelistStyle),
 }
