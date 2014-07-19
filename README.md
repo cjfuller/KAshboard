@@ -30,7 +30,7 @@ TODO
 
 ### BigQuery Setup
 
-Go [here](https://code.google.com/apis/console/b/0/?noredirect#project:124072386181:access) and scroll to the bottom to **Service accounts**. You'll see a client ID in the form of ...@developer.gserviceaccount.com. Put that into the secrets as `bqClientId`.
+Go [here](https://code.google.com/apis/console/b/0/?noredirect#project:124072386181:access) and scroll to the bottom to **Service accounts**. You'll see a client email in the form of `...@developer.gserviceaccount.com`. Put that into the secrets as `bqClientId`.
 
 Full instructions are [here](https://developers.google.com/bigquery/authorization#service-accounts) if you want more context.
 
