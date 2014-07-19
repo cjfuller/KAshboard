@@ -9,7 +9,8 @@
         "cors": "2.4.x",
         "cheerio": "0.17.x",
         "express": "4.6.x",
-        "googleapis": "0.8.x"
+        "googleapis": "0.8.x",
+        "moment-timezone": "0.1.x"
     },
     "devDependencies": {
         "beefy": "2.0.x",
