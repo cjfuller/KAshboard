@@ -24,6 +24,20 @@ Then you can run the server:
 node server/app.js
 ```
 
+### GitHub Setup
+
+TODO
+
+### BigQuery Setup
+
+Follow the instructions [here](https://developers.google.com/bigquery/authorization#service-accounts) to get a *p12* file. Then, run:
+```bash
+openssl pkcs12 -in <long-hex-string>-privatekey.p12 -out bigquery.pem -nodes
+```
+to generate a *pem* file. Both file extensions are in the gitignore.
+
+Note that you'll also see a client ID. Paste that into the secrets too!
+
 ## Widget guidelines
 
 ### Loading message
