@@ -1,6 +1,5 @@
 var _ = require("underscore");
 var RCSS = require("rcss");
-var colors = require("./ka-colors.js");
 var styleVars = require("./style-vars.js");
 var logoHeightPx = 250;
 

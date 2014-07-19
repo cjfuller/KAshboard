@@ -1,5 +1,4 @@
 var RCSS = require('rcss');
-var colors = require('./ka-colors.js');
 var vars = require('./style-vars.js');
 
 var listStyle = {
@@ -8,7 +7,6 @@ var listStyle = {
 }
 
 var ghWidgetStyle = {
-    color: colors.grayExtraLight,
 }
 
 var numberStyle = {
