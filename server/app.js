@@ -162,4 +162,26 @@ app.get('/weather/:location', function(req, res) {
     });
 });
 
+// Get latest stories, including unpublished
+app.get('/stories', function(req, res) {
+    var oauth = new OAuth.OAuth(
+        'https://www.khanacademy.org/api/auth/request_token',
+        'https://www.khanacademy.org/api/auth/access_token',
+        secrets.kaConsumerKey,
+        secrets.kaConsumerSecret,
+        '1.0',
+        null,
+        'HMAC-SHA1'
+    );
+    oauth.get(
+        'http://www.khanacademy.org/api/v1/stories' +
+        '?include_unpublished=1&casing=camel',
+        secrets.kaAccessToken,
+        secrets.kaAccessTokenSecret,
+        function(e, data) {
+            res.send(JSON.parse(data));
+        }
+    );
+});
+
 app.listen(3000);

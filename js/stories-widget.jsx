@@ -7,16 +7,15 @@ var styles = require("./style/stories-style.js");
 var WidgetContainer = require('./widget-container.jsx');
 var colors = require('./style/ka-colors.js');
 
-// Number of latest stories to get
-var STORIES_COUNT = 20;
-
 // Time to show each story, in milliseconds
 var INTERVAL_MS = 30000;
 
 var widgetColor = colors.mathSubjectColor;
 
 /**
- * Cycles through the latest STORIES_COUNT stories on KA.
+ * Cycles through the latest submitted stories on KA.
+ *
+ * Includes unpublished and private stories.
  */
 StoriesWidget = React.createClass({
     getInitialState: function() {
@@ -32,9 +31,7 @@ StoriesWidget = React.createClass({
     },
 
     componentDidMount: function() {
-        $.get("http://www.khanacademy.org/api/v1/stories",
-              {count: STORIES_COUNT, casing: "camel"},
-              function(result) {
+        $.get("http://localhost:3000/stories", function(result) {
             this.setState({stories: result.stories});
             this.interval = setInterval(this.renderNextStory, INTERVAL_MS);
         }.bind(this));
@@ -68,7 +65,9 @@ StoriesWidget = React.createClass({
         this.truncateStory(story);
         return <WidgetContainer color={widgetColor}>
             <div className={styles.container.className}>
-                <div className={styles.title.className}>{story.name}</div>
+                <div className={styles.title.className}>
+                    {story.name || "Anonymous"}
+                </div>
                 <div>{story.formattedDate}</div>
                 <div className={styles.text.className}>{story.story}</div>
             </div>

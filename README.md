@@ -40,6 +40,16 @@ openssl pkcs12 -in <long-hex-string>-privatekey.p12 -out bigquery.pem -nodes
 ```
 to generate a *pem* file. Both file extensions are in the gitignore.
 
+### Khan Academy API OAuth
+
+Khan Academy uses OAuth 1.0. The full instructions are [here](https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication).
+
+First, get a consumer key and secret [here](https://www.khanacademy.org/api-apps/register). Put these into `secrets.js`.
+
+Then clone this: [Khan/khan-api](https://github.com/Khan/khan-api)
+
+Navigate to `examples/test_client`. Modify the script to print out `ACCESS_TOKEN` after `get_access_token()` is called. That will give you the access token and secret. Put these into `secrets.js`.
+
 ## Widget guidelines
 
 ### Loading message
