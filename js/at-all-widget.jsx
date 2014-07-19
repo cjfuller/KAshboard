@@ -12,7 +12,7 @@ var kaColors = require("./style/ka-colors.js");
 var INTERVAL_MS = 10000;
 
 /**
- * Displays the last @all in the Khan Academy HipChat room.
+ * Displays the last @all or @here in the Khan Academy HipChat room.
  */
 AtAllWidget = React.createClass({
     getInitialState: function() {
@@ -63,12 +63,12 @@ AtAllWidget = React.createClass({
         }
         var message = this.state.message;
         var dateString = (
-            moment(message.date).tz("America/Los_Angeles").calendar()
+            moment(message.date).tz("America/Los_Angeles").fromNow()
         );
         return <WidgetContainer color={kaColors.scienceDomainColor}>
             <div className={styles.container.className}>
                 <div className={styles.title.className}>
-                    Latest @all in Khan Academy
+                    Latest HipChat announcement
                 </div>
                 <div>
                     {message.from.name}

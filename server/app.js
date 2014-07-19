@@ -164,7 +164,7 @@ app.get('/team', function(req, res) {
     });
 });
 
-// Returns the latest @all in the Khan Academy HipChat room
+// Returns the latest @all or @here in the Khan Academy HipChat room
 // Returns an empty JSON object if there is no @all in the last 75 messages
 app.get('/at-all', function(req, res) {
     var hipchatRoom = 'Khan Academy';
@@ -193,7 +193,8 @@ app.get('/at-all', function(req, res) {
             }
             for (var i = 0; i < history.items.length; i++) {
                 var item = history.items[i];
-                if (item.message.indexOf('@all') >= 0) {
+                if (item.message.indexOf('@all') >= 0 ||
+                    item.message.indexOf('@here') >= 0) {
                     res.send({
                         date: item.date,
                         from: item.from,
