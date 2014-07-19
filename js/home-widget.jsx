@@ -76,16 +76,9 @@ var WeatherWidget = React.createClass({
         spacer: "&nbsp;&nbsp;"
     },
 
-    convertToDegC: function(temp) {
-        return (temp - 32)*5.0/9.0;
-    },
-
     getTemperatureString: function() {
         var temp = this.state.weather.temperature;
         var degrees = locationInfo[this.props.location].degreeUnit;
-        if (degrees === "C") {
-            temp = this.convertToDegC(temp);
-        }
         return Math.round(temp) + "\u00b0" + degrees;
     },
 
@@ -99,8 +92,10 @@ var WeatherWidget = React.createClass({
         location = location || this.props.location;
 
         var locationCoords = locationInfo[location].latLong;
-        $.get("http://localhost:3000/weather/" + locationCoords,
-                function(result) {
+        var units = (locationInfo[location].degreeUnit === "C" ?
+                        "si" : "us");
+        $.get("http://localhost:3000/weather/" + locationCoords +
+                "?units=" + units, function(result) {
             this.setState({weather: result});
         }.bind(this));
     },
