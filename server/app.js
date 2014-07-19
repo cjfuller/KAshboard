@@ -151,6 +151,10 @@ app.get('/weather', function(req, res) {
             str += chunk;
         });
         response.on('end', function(chunk) {
+            if (str == 'Forbidden') {
+                res.send({});
+                return;
+            }
             var forecast = JSON.parse(str);
             res.send(forecast.currently);
         });

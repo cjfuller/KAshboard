@@ -14,20 +14,12 @@ var BigQuery = React.createClass({
     },
 
     componentDidMount: function() {
-        $.ajax({
-            dataType: 'jsonp',
-            url: 'http://www.khanacademy.org/devadmin/bigquerycsv',
-            data: {
-                q: 'api_public.company_goals',
-                // TODO(tony): remove this key if we're open-sourcing later.
-                // This allows access to the api_public dataset
-                key: '',
-            },
-            success: function(result) {
+        $.get('http://localhost:3000/bq-list',
+            function(result) {
                 console.log(result);
                 this.setState({table: result});
             }.bind(this)
-        });
+        );
     },
 
     render: function() {
@@ -39,10 +31,11 @@ var BigQuery = React.createClass({
             </div>;
         }
 
-        return (
-            <WidgetContainer>
-                <div />
-            </WidgetContainer>
+        return (<div>
+                <WidgetContainer>
+                    {this.state.table}
+                </WidgetContainer>
+            </div>
         );
     }
 });
