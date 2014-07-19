@@ -30,8 +30,8 @@ var weatherContainer = {
 }
 
 var weatherStyle = {
-    fontFamily: "weathericons",
-    fontSize: "3em",
+    paddingTop: "2px",
+    paddingRight: "15px",
 }
 
 var dateStyle = {
@@ -44,6 +44,7 @@ var timeStyle = {
 
 var temperatureStyle = {
     fontSize: "3em",
+    verticalAlign: "top",
 }
 
 module.exports = {

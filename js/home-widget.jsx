@@ -9,6 +9,11 @@ var locationInfo = require("./location-info.js");
 
 var styles = require("./style/home-style.js");
 
+// Animated weather icons
+var Skycons = require("../third_party/skycons.js").Skycons;
+var skycons = new Skycons();
+skycons.play();
+
 var weightedSelect = function(weights) {
     var sumWeight = 0;
     _.each(weights, function(w) {
@@ -65,17 +70,6 @@ var TimeDateWidget = React.createClass({
 var WEATHER_INTERVAL_MS = 5 * 60 * 1000;
 
 var WeatherWidget = React.createClass({
-
-    //dangerously setting weather font characters from a lookup table
-    //TODO(colin): is this actually safe if this is happening client-side?
-    //
-    //TODO(kevin): Use Skycons:
-    //http://blog.forecast.io/skycons-unobtrustive-animated-weather-icons/
-    weatherCharacterLookup: {
-        sunny: "&#xf00d;",
-        spacer: "&nbsp;&nbsp;"
-    },
-
     getTemperatureString: function() {
         var temp = this.state.weather.temperature;
         var degrees = locationInfo[this.props.location].degreeUnit;
@@ -98,6 +92,7 @@ var WeatherWidget = React.createClass({
             $.get("http://localhost:3000/weather/" + locationCoords +
                     "?units=" + units, function(result) {
                 this.setState({weather: result});
+                skycons.set("skycon", result.icon);
             }.bind(this));
         } else {
             this.setState({weather: locationInfo[location].staticWeatherInfo});
@@ -128,12 +123,12 @@ var WeatherWidget = React.createClass({
             </div>;
         }
 
-        var weather = this.weatherCharacterLookup;
         return <div className={styles.weatherContainer.className}>
-            <span className={styles.weather.className}
-                 dangerouslySetInnerHTML={
-                     {__html: (weather[this.props.weather] + weather.spacer)}
-                 }/>
+            <canvas
+                id="skycon"
+                className={styles.weather.className}
+                width="50"
+                height="50" />
             <span className={styles.temperature.className}>
                 {this.getTemperatureString()}
             </span>
@@ -149,7 +144,7 @@ var LocationWidget = React.createClass({
                 {locationInfo[this.props.location].displayName}
             </div>
             <TimeDateWidget location={this.props.location}/>
-            <WeatherWidget weather='sunny' location={this.props.location}/>
+            <WeatherWidget location={this.props.location}/>
         </div>
     },
 });
