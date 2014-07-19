@@ -12,7 +12,6 @@ var HighchartOptions = {
     },
     chart: {
         type: "spline",
-        zoomType: "xy",
         backgroundColor: "rgba(0,0,0,0)",
         width: styleVars.baseComponentWidth(),
         height: styleVars.baseComponentHeight(),
@@ -50,12 +49,9 @@ var HighchartOptions = {
         series: {
             marker: {
                 radius: 2
-            }
+            },
+            enableMouseTracking: false
         }
-    },
-    tooltip: {
-        crosshairs: [true, true],
-        shared: true
     },
     global: {
         useUTC: false
