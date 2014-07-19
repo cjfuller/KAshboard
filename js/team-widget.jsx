@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var WidgetContainer = require('./widget-container.jsx');
 
 // Time to show each employee, in milliseconds
 var INTERVAL_MS = 10000;
@@ -39,15 +40,19 @@ TeamWidget = React.createClass({
     render: function() {
         if (this.state.team.length === 0) {
             return <div>
-                <LoadingMessage />
+                <WidgetContainer>
+                    <LoadingMessage />
+                </WidgetContainer>
             </div>;
         }
         var employee = this.state.team[this.state.currentIdx];
-        return <div>
-            <p>{employee.name}</p>
-            <p>{employee.title}</p>
-            <img src={employee.imageUrl} />
-        </div>;
+        return <WidgetContainer>
+            <div>
+                <p>{employee.name}</p>
+                <p>{employee.title}</p>
+                <img src={employee.imageUrl} />
+            </div>
+        </WidgetContainer>;
     }
 });
 

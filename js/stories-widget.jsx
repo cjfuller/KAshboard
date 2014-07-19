@@ -4,6 +4,7 @@ var React = require("react");
 
 var LoadingMessage = require("./loading-message.jsx");
 var styles = require("./style/stories-style.js");
+var WidgetContainer = require('./widget-container.jsx');
 
 // Number of latest stories to get
 var STORIES_COUNT = 20;
@@ -49,11 +50,13 @@ StoriesWidget = React.createClass({
             </div>;
         }
         var story = this.state.stories[this.state.currentIdx];
-        return <div className={styles.container.className}>
-            <div className={styles.title.className}>{story.name}</div>
-            <div>{story.formattedDate}</div>
-            <div>{story.story}</div>
-        </div>;
+        return <WidgetContainer>
+            <div className={styles.container.className}>
+                <div className={styles.title.className}>{story.name}</div>
+                <div>{story.formattedDate}</div>
+                <div>{story.story}</div>
+            </div>
+        </WidgetContainer>
     }
 });
 

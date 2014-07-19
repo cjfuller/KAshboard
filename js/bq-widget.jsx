@@ -3,6 +3,7 @@
  */
 
 var React = require('react');
+var WidgetContainer = require('./widget-container.jsx');
 
 var BigQuery = React.createClass({
 
@@ -32,12 +33,16 @@ var BigQuery = React.createClass({
     render: function() {
         if (!this.state.table) {
             return <div>
-                <LoadingMessage />
+                <WidgetContainer>
+                    <LoadingMessage />
+                </WidgetContainer>
             </div>;
         }
 
         return (
-            <div />
+            <WidgetContainer>
+                <div />
+            </WidgetContainer>
         );
     }
 });

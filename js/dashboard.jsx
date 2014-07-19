@@ -16,15 +16,9 @@ var Dashboard = React.createClass({
     render: function() {
         return <div className={dashboardClass.className}>
             <GHMetaWidget name="Github Gibbon"/>
-            <WidgetContainer>
-                <StoriesWidget />
-            </WidgetContainer>
-            <WidgetContainer>
-                <TeamWidget />
-            </WidgetContainer>
-            <WidgetContainer>
-                <BigQueryWidget />
-            </WidgetContainer>
+            <StoriesWidget />
+            <TeamWidget />
+            <BigQueryWidget />
             <WidgetContainer>
             Testing wrapping...
             </WidgetContainer>
