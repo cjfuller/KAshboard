@@ -34,6 +34,8 @@ You need to generate an oauth2 token to access the API.  Follow the instructions
 
 Then symlink the token (which should be at ~/.bigquery.v2.token into the server directory).
 
+You'll also need to put the KA project id into `exports.bqProjectId` in `secrets.js`.
+
 ### Khan Academy API OAuth
 
 Khan Academy uses OAuth 1.0. The full instructions are [here](https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication).
