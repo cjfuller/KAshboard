@@ -5,12 +5,15 @@ var React = require("react");
 var LoadingMessage = require("./loading-message.jsx");
 var styles = require("./style/stories-style.js");
 var WidgetContainer = require('./widget-container.jsx');
+var colors = require('./style/ka-colors.js');
 
 // Number of latest stories to get
 var STORIES_COUNT = 20;
 
 // Time to show each story, in milliseconds
 var INTERVAL_MS = 10000;
+
+var widgetColor = colors.mathSubjectColor;
 
 /**
  * Cycles through the latest STORIES_COUNT stories on KA.
@@ -46,11 +49,13 @@ StoriesWidget = React.createClass({
     render: function() {
         if (this.state.stories.length === 0) {
             return <div>
-                <LoadingMessage />
+                <WidgetContainer color={widgetColor}>
+                    <LoadingMessage />
+                </WidgetContainer>
             </div>;
         }
         var story = this.state.stories[this.state.currentIdx];
-        return <WidgetContainer>
+        return <WidgetContainer color={widgetColor}>
             <div className={styles.container.className}>
                 <div className={styles.title.className}>{story.name}</div>
                 <div>{story.formattedDate}</div>
