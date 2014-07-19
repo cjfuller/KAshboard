@@ -48,10 +48,12 @@ StoriesWidget = React.createClass({
 
     truncateStory: function(story) {
         var charLimit = 500;
-        var initialTruncation = story.story.substr(0, charLimit);
-        var cleanedUp = initialTruncation.substr(0,
-            initialTruncation.lastIndexOf(" "));
-        story.story = cleanedUp + "...";
+        if (story.story.length > 500) {
+            var initialTruncation = story.story.substr(0, charLimit);
+            var cleanedUp = initialTruncation.substr(0,
+                initialTruncation.lastIndexOf(" "));
+            story.story = cleanedUp + "...";
+        }
     },
 
     render: function() {
