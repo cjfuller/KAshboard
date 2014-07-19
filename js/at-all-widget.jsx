@@ -1,8 +1,12 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var moment = require("moment-timezone");
 
 var WidgetContainer = require('./widget-container.jsx');
+var styles = require("./style/at-all-style.js");
+var kaColors = require("./style/ka-colors.js");
+
 
 // Refresh rate, in milliseconds
 var INTERVAL_MS = 10000;
@@ -46,7 +50,7 @@ AtAllWidget = React.createClass({
 
     render: function() {
         if (!this.state.hasLoaded) {
-            return <WidgetContainer>
+            return <WidgetContainer color={kaColors.scienceDomainColor}>
                 <div>
                     <LoadingMessage />
                 </div>
@@ -58,12 +62,18 @@ AtAllWidget = React.createClass({
             </div>;
         }
         var message = this.state.message;
-        return <WidgetContainer>
-            <div>
-                <p>Latest @all in Khan Academy</p>
-                <p>{message.from.name} (@{message.from.mention_name})</p>
+        var dateString = moment(message.date).tz("America/Los_Angeles").format("YYYY-MM-DD H:mm:ss z");
+        return <WidgetContainer color={kaColors.scienceDomainColor}>
+            <div className={styles.container.className} >
+                <div className={styles.title.className}>
+                    Latest <strong>@all</strong> in Khan Academy
+                </div>
+                <div>
+                    {message.from.name}
+                    (<strong>@{message.from.mention_name}</strong>)
+                </div>
+                <div>{dateString}</div>
                 <p>{message.message}</p>
-                <p>{message.date}</p>
             </div>
         </WidgetContainer>;
     }
