@@ -6,6 +6,8 @@ var express = require('express')
     , cors = require('cors')
     , app = express();
 
+var fs = require('fs');
+
 // Enable CORS
 app.use(cors());
 
@@ -17,12 +19,17 @@ var async = require('async')
 
 var https = require('https');
 
-var fs = require('fs');
-var bigquery = require('google-bigquery'),
-    client = bigquery({
-        "iss": secrets.bqClientId,
-        "key": fs.readFileSync("./bigquery.pem", "utf8")
-    });
+var bqToken = JSON.parse(fs.readFileSync(
+    "./server/.bigquery.v2.token", "utf8"));
+
+var oauth2Client = 
+    new gapi.auth.OAuth2(bqToken.client_id, bqToken.client_secret, "");
+
+oauth2Client.credentials = {
+    access_token: bqToken.access_token,
+    refresh_token: bqToken.refresh_token,
+}
+
 
 app.get('/github', function(req, res){
     var options = {
@@ -47,12 +54,14 @@ app.get('/github', function(req, res){
 // BigQuery stuff...
 // TODO(tony): prefix all this with "BQ" to avoid confusion
 
-// List tables
+//List tables
 app.get('/bq-list', function (req, res) {
-    client.getProjects(function (err, projs) {
-        console.log(projs);
-        console.log(projs.projects); //list of projects.
-        res.send(projs.projects);
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.datasets.list({
+            projectId: secrets.bqProjectId});
+        req.withAuthClient(oauth2Client).execute(function(err, results) {
+            res.send(results);
+        });        
     });
 });
 

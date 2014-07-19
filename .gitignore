@@ -2,5 +2,6 @@ node_modules
 js/gh-token.js
 js/bq-token.js
 server/secrets.js
+server/.bigquery*
 *.pem
 *.p12

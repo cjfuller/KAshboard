@@ -30,15 +30,9 @@ TODO
 
 ### BigQuery Setup
 
-Go [here](https://code.google.com/apis/console/b/0/?noredirect#project:124072386181:access) and scroll to the bottom to **Service accounts**. You'll see a client email in the form of `...@developer.gserviceaccount.com`. Put that into the secrets as `bqClientId`.
+You need to generate an oauth2 token to access the API.  Follow the instructions at [https://github.com/Khan/webapp/blob/master/bigquery/bq_connection.py#L78](https://github.com/Khan/webapp/blob/master/bigquery/bq_connection.py#L78).
 
-Full instructions are [here](https://developers.google.com/bigquery/authorization#service-accounts) if you want more context.
-
-Next, generate a private key and get a *p12* file. Then run:
-```bash
-openssl pkcs12 -in <long-hex-string>-privatekey.p12 -out bigquery.pem -nodes
-```
-to generate a *pem* file. Both file extensions are in the gitignore.
+Then symlink the token (which should be at ~/.bigquery.v2.token into the server directory).
 
 ### Khan Academy API OAuth
 
