@@ -67,7 +67,6 @@ app.get('/bq-list', function (req, res) {
 });
 
 // Get everyone on the team page
-// TODO(kevin): Add interns using async
 app.get('/team', function(req, res) {
     var getTeam = function(url, callback) {
         https.get(url, function(response) {
