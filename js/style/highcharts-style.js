@@ -1,6 +1,11 @@
 var styleVars = require("./style-vars.js");
 var kaColors = require("./ka-colors.js");
 
+var defaultTextStyle = {
+    color: kaColors.grayExtraLight,
+    fontFamily: "Proxima Nova",
+}
+
 var HighchartOptions = {
     credits: {
         enabled: false
@@ -13,58 +18,32 @@ var HighchartOptions = {
         height: styleVars.baseComponentHeight(),
     },
     labels: {
-        style: {
-            color: kaColors.grayExtraLight,
-            fontFamily: "Proxima Nova",
-        }
+        style: defaultTextStyle
     },
     title: {
-        style: {
-            color: kaColors.grayExtraLight,
-            fontFamily: "Proxima Nova",
-        }
+        style: defaultTextStyle
     },
     legend: {
-        style: {
-            color: kaColors.grayExtraLight,
-            fontFamily: "Proxima Nova",
-        },
-        itemStyle: {
-            color: kaColors.grayExtraLight,
-            fontFamily: "Proxima Nova",
-        },
+        style: defaultTextStyle,
+        itemStyle: defaultTextStyle,
         title: {
-            style: {
-                color: kaColors.grayExtraLight,
-                fontFamily: "Proxima Nova",
-            }
+            style: defaultTextStyle
         }
     },
     xAxis: {
         labels: {
-            style: {
-                color: kaColors.grayExtraLight,
-            }
+            style: defaultTextStyle
         },
         title: {
-            style: {
-                color: kaColors.grayExtraLight,
-                fontFamily: "Proxima Nova",
-            }
+            style: defaultTextStyle
         }
     },
     yAxis: {
         labels: {
-            style: {
-                color: kaColors.grayExtraLight,
-                fontFamily: "Proxima Nova",
-            }
+            style: defaultTextStyle
         },
         title: {
-            style: {
-                color: kaColors.grayExtraLight,
-                fontFamily: "Proxima Nova",
-            }
+            style: defaultTextStyle
         }
     },
     plotOptions: {
