@@ -5,6 +5,7 @@ var _ = require("underscore");
 
 var colors = require("./style/ka-colors.js");
 var WidgetContainer = require("./widget-container.jsx");
+var locationInfo = require("./location-info.js");
 
 var styles = require("./style/home-style.js");
 
@@ -25,18 +26,10 @@ var weightedSelect = function(weights) {
     return choice;
 }
 
-
 var TimeDateWidget = React.createClass({
-    tzinfo: {
-        mountainView: "America/Los_Angeles",
-        newYork: "America/New_York",
-        toronto: "America/Toronto",
-        windsor: "America/Toronto",
-        princeton: "America/New_York",
-    },
     updateTimeMs: 1000,
     getTimeWithTz: function() {
-        return moment().tz(this.tzinfo[this.props.location]);
+        return moment().tz(locationInfo[this.props.location].tz);
     },
     getInitialState: function() {
         return {date: this.getTimeWithTz()};
@@ -77,29 +70,13 @@ var WeatherWidget = React.createClass({
         spacer: "&nbsp;&nbsp;"
     },
 
-    latLongLookup: {
-        mountainView: "37.389444,-122.081944",
-        newYork: "40.7056308,-73.9780035",
-        toronto: "43.7182713,-79.3777061",
-        windsor: "42.2912792,-83.002882",
-        princeton: "40.3483133,-74.6698424",
-    },
-
-    degreeTypes: {
-        mountainView: "F",
-        newYork: "F",
-        princeton: "F",
-        toronto: "C",
-        windsor: "C",
-    },
-
     convertToDegC: function(temp) {
         return (temp - 32)*5.0/9.0;
     },
 
     getTemperatureString: function() {
         var temp = this.state.weather.temperature;
-        var degrees = this.degreeTypes[this.props.location];
+        var degrees = locationInfo[this.props.location].degreeUnit;
         if (degrees === "C") {
             temp = this.convertToDegC(temp);
         }
@@ -115,7 +92,7 @@ var WeatherWidget = React.createClass({
     refreshWeather: function(location) {
         location = location || this.props.location;
 
-        var locationCoords = this.latLongLookup[location];
+        var locationCoords = locationInfo[location].latLong;
         $.get("http://localhost:3000/weather/" + locationCoords,
                 function(result) {
             this.setState({weather: result});
@@ -160,17 +137,11 @@ var WeatherWidget = React.createClass({
 });
 
 var LocationWidget = React.createClass({
-    locationDisplayNames: {
-        mountainView: "Mountain View",
-        newYork: "New York",
-        toronto: "Toronto",
-        windsor: "Windsor",
-        princeton: "Princeton",
-    },
+
     render: function() {
         return <div className={styles.locationHolder.className}>
             <div className={styles.title.className}>
-                {this.locationDisplayNames[this.props.location]}
+                {locationInfo[this.props.location].displayName}
             </div>
             <TimeDateWidget location={this.props.location}/>
             <WeatherWidget weather='sunny' location={this.props.location}/>
@@ -179,19 +150,16 @@ var LocationWidget = React.createClass({
 });
 
 
-
 var HomeWidget = React.createClass({
-    weightedHomes: {
-        mountainView: 50,
-        newYork: 1,
-        toronto: 1,
-        windsor: 1,
-        princeton: 1,
-    },
+
     locationSwitchTimeMs: 30000,
 
     selectLocation: function() {
-        return weightedSelect(this.weightedHomes);
+        var weights = {};
+        _.each(locationInfo, function(info, loc) {
+            weights[loc] = info.weight;
+        });
+        return weightedSelect(weights);
     },
     getInitialState: function() {
         return {location: this.selectLocation()};
