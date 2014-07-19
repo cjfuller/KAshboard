@@ -3,13 +3,9 @@ var _ = require("underscore");
 
 var styleVars = require("./style-vars.js");
 
-var gridSpacing = 15;
-var nWide = 5;
-var nTall = 3;
-var baseComponentWidth = (styleVars.dashboardWidthPx - (nWide + 1) *
-                          gridSpacing)/nWide;
-var baseComponentHeight = (styleVars.dashboardHeightPx - (nTall + 1) *
-                          gridSpacing)/nTall;
+var baseComponentWidth = styleVars.baseComponentWidth();
+var baseComponentHeight = styleVars.baseComponentHeight();
+var gridSpacing = styleVars.gridSpacing;
 
 var widgetStyleBase = {
     position: 'relative',
