@@ -15,6 +15,20 @@ var async = require('async')
     , https = require('https')
     , querystring = require('querystring');
 
+var https = require('https');
+
+console.log(secrets.bqClientId);
+console.log(secrets.bqToken);
+var fs = require('fs');
+var bigquery = require('google-bigquery'),
+    client = bigquery({
+        "iss": '124072386181-qqedvnl36ver0khc3pmqbh4bevlh58qd.apps.googleusercontent.com',
+        // "iss": secrets.bqClientId,
+        // "key": secrets.bqToken,
+        // "key": fs.readFileSync("/Users/tony/.bigquery.v2.token", "utf8")
+        "key": fs.readFileSync("/Users/tony/khan/analytics/client_secrets.json", "utf8")
+    });
+
 app.get('/github', function(req, res){
     var options = {
         hostname: 'api.github.com',
@@ -40,27 +54,12 @@ app.get('/github', function(req, res){
 var projectNumber = secrets.bqProjectNumber;
 var clientId = secrets.bqClientId;
 
-function auth() {
-    var config = {
-        'client_id': clientId,
-        'scope': 'https://www.googleapis.com/auth/bigquery',
-    };
-    gapi.auth.authorize(config, function() {
-        gapi.client.load('bigquery', 'v2');
-    });
-};
-
 // List tables
-app.get('/bq-list', function(req, res) {
-    // TODO(tony): order?
-    auth();
-
-    var request = gapi.client.bigquery.datasets.list({
-        'projectId': projectNumber
-    });
-
-    request.execute(function(response) {
-        res.send(JSON.stringify(response.result.datasets, null));
+app.get('/bq-list', function (req, res) {
+    client.getProjects(function (err, projs) {
+        console.log(projs);
+        console.log(projs.projects); //list of projects.
+        res.send(proj.projects);
     });
 });
 

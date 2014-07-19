@@ -10,7 +10,8 @@
         "cheerio": "0.17.x",
         "express": "4.6.x",
         "googleapis": "0.8.x",
-        "moment-timezone": "0.1.x"
+        "moment-timezone": "0.1.x",
+        "google-bigquery": "0.1.x"
     },
     "devDependencies": {
         "beefy": "2.0.x",

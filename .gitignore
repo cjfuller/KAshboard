@@ -2,3 +2,5 @@ node_modules
 js/gh-token.js
 js/bq-token.js
 server/secrets.js
+*.pem
+*.p12
