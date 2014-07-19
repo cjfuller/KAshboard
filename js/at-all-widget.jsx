@@ -62,14 +62,17 @@ AtAllWidget = React.createClass({
             </div>;
         }
         var message = this.state.message;
-        var dateString = moment(message.date).tz("America/Los_Angeles").format("YYYY-MM-DD H:mm:ss z");
+        var dateString = (
+            moment(message.date).tz("America/Los_Angeles").calendar()
+        );
         return <WidgetContainer color={kaColors.scienceDomainColor}>
-            <div className={styles.container.className} >
+            <div className={styles.container.className}>
                 <div className={styles.title.className}>
-                    Latest <strong>@all</strong> in Khan Academy
+                    Latest @all in Khan Academy
                 </div>
                 <div>
                     {message.from.name}
+                    {" "}
                     (<strong>@{message.from.mention_name}</strong>)
                 </div>
                 <div>{dateString}</div>
