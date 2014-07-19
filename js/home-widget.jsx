@@ -1,20 +1,48 @@
 var React = require("react");
 var RCSS = require("rcss");
 var moment = require("moment-timezone");
+var _ = require("underscore");
 
 var colors = require("./style/ka-colors.js");
 var WidgetContainer = require("./widget-container.jsx");
 
 var styles = require("./style/home-style.js");
 
+var weightedSelect = function(weights) {
+    var sumWeight = 0;
+    _.each(weights, function(w) {
+        sumWeight += w;
+    });
+    var rand = Math.random() * sumWeight;
+    var cumulativeWeight = 0;
+    var choice = null;
+    _.each(weights, function(w, k) {
+        cumulativeWeight += w;
+        if (rand < cumulativeWeight) {
+            choice = choice || k;
+        }
+    });
+    return choice;
+}
+
 
 var TimeDateWidget = React.createClass({
+    tzinfo: {
+        mountainView: "America/Los_Angeles",
+        newYork: "America/New_York",
+        toronto: "America/Toronto",
+        windsor: "America/Toronto",
+        princeton: "America/New_York",
+    },
     updateTimeMs: 1000,
+    getTimeWithTz: function() {
+        return moment().tz(this.tzinfo[this.props.location]);
+    },
     getInitialState: function() {
-        return {date: moment().tz(this.props.tz)};
+        return {date: this.getTimeWithTz()};
     },
     getDateInTZ: function() {
-        this.setState({date: moment().tz(this.props.tz)});
+        this.setState({date: this.getTimeWithTz()});
     },
     render: function() {
         var date = this.state.date;
@@ -93,10 +121,19 @@ var WeatherWidget = React.createClass({
 });
 
 var LocationWidget = React.createClass({
+    locationDisplayNames: {
+        mountainView: "Mountain View",
+        newYork: "New York",
+        toronto: "Toronto",
+        windsor: "Windsor",
+        princeton: "Princeton",
+    },
     render: function() {
         return <div className={styles.locationHolder.className}>
-            <div className={styles.title.className}>Mountain View</div>
-            <TimeDateWidget tz="America/Los_Angeles"/>
+            <div className={styles.title.className}>
+                {this.locationDisplayNames[this.props.location]}
+            </div>
+            <TimeDateWidget location={this.props.location}/>
             <WeatherWidget weather='sunny'/>
         </div>
     },
@@ -105,14 +142,37 @@ var LocationWidget = React.createClass({
 
 
 var HomeWidget = React.createClass({
+    weightedHomes: {
+        mountainView: 50,
+        newYork: 1,
+        toronto: 1,
+        windsor: 1,
+        princeton: 1,
+    },
+    locationSwitchTimeMs: 30000,
+
+    selectLocation: function() {
+        return weightedSelect(this.weightedHomes);
+    },
+    getInitialState: function() {
+        return {location: this.selectLocation()};
+    },
+    randomizeLocationState: function() {
+        this.setState({location: this.selectLocation()});
+    },
     render: function() {
+        var location = this.state.location;
         return <WidgetContainer sizeClass="doubleWide" color={colors.csDomainColor}>
             <div className={styles.imgHolder.className}>
                 <img alt="KA logo"
                     src="/images/khan-logo-vertical-transparent.png"/>
             </div>
-            <LocationWidget className={styles.locationWidget.className}/>
+            <LocationWidget className={styles.locationWidget.className}
+                            location={location}/>
         </WidgetContainer>
+    },
+    componentDidMount: function() {
+        setInterval(this.randomizeLocationState, this.locationSwitchTimeMs);
     },
 });
 
