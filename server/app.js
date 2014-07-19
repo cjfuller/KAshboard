@@ -10,6 +10,7 @@ var cors = require('cors');
 app.use(cors());
 
 var https = require('https');
+var querystring = require('querystring');
 
 var gapi = require('googleapis');
 
@@ -86,6 +87,46 @@ app.get('/team', function(req, res) {
             }).toArray();
 
             res.send(team);
+        });
+    });
+});
+
+// Returns the latest @all in the Khan Academy HipChat room
+// Returns an empty JSON object if there is no @all in the last 75 messages
+app.get('/at-all', function(req, res) {
+    var hipchatRoom = 'Khan Academy';
+    var params = {
+        auth_token: secrets.hipchatToken,
+        reverse: false
+    };
+    var options = {
+        hostname: 'api.hipchat.com',
+        path: ('/v2/room/' + encodeURIComponent(hipchatRoom) + '/history?' +
+               querystring.stringify(params))
+    };
+    https.get(options, function(response) {
+        var str = '';
+
+        response.on('data', function(chunk) {
+            str += chunk;
+        });
+
+        response.on('end', function(chunk) {
+            var history = JSON.parse(str);
+            for (var i = 0; i < history.items.length; i++) {
+                var item = history.items[i];
+                if (item.message.indexOf('@all') >= 0) {
+                    res.send({
+                        date: item.date,
+                        from: item.from,
+                        message: item.message
+                    });
+                    return;
+                }
+            };
+
+            // No @all in the last 75 messages
+            res.send({});
         });
     });
 });
