@@ -17,4 +17,4 @@ var HomeWidget = React.createClass({
     }
 });
 
-module.exports = HomeWidget
+module.exports = HomeWidget;
