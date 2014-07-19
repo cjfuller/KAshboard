@@ -91,13 +91,17 @@ var WeatherWidget = React.createClass({
     refreshWeather: function(location) {
         location = location || this.props.location;
 
-        var locationCoords = locationInfo[location].latLong;
-        var units = (locationInfo[location].degreeUnit === "C" ?
-                        "si" : "us");
-        $.get("http://localhost:3000/weather/" + locationCoords +
-                "?units=" + units, function(result) {
-            this.setState({weather: result});
-        }.bind(this));
+        if (locationInfo[location].latLong) {
+            var locationCoords = locationInfo[location].latLong;
+            var units = (locationInfo[location].degreeUnit === "C" ?
+                            "si" : "us");
+            $.get("http://localhost:3000/weather/" + locationCoords +
+                    "?units=" + units, function(result) {
+                this.setState({weather: result});
+            }.bind(this));
+        } else {
+            this.setState({weather: locationInfo[location].staticWeatherInfo});
+        }
     },
 
     componentDidMount: function() {
