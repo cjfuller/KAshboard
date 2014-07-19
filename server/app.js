@@ -15,6 +15,7 @@ var async = require('async')
     , cheerio = require('cheerio')
     , gapi = require('googleapis')
     , https = require('https')
+    , OAuth = require('oauth')
     , querystring = require('querystring');
 
 var https = require('https');
