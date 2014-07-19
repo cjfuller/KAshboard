@@ -77,14 +77,47 @@ var WeatherWidget = React.createClass({
         spacer: "&nbsp;&nbsp;"
     },
 
+    latLongLookup: {
+        mountainView: "37.389444,-122.081944",
+        newYork: "40.7056308,-73.9780035",
+        toronto: "43.7182713,-79.3777061",
+        windsor: "42.2912792,-83.002882",
+        princeton: "40.3483133,-74.6698424",
+    },
+
+    degreeTypes: {
+        mountainView: "F",
+        newYork: "F",
+        princeton: "F",
+        toronto: "C",
+        windsor: "C",
+    },
+
+    convertToDegC: function(temp) {
+        return (temp - 32)*5.0/9.0;
+    },
+
+    getTemperatureString: function() {
+        var temp = this.state.weather.temperature;
+        var degrees = this.degreeTypes[this.props.location];
+        if (degrees === "C") {
+            temp = this.convertToDegC(temp);
+        }
+        return Math.round(temp) + "\u00b0" + degrees;
+    },
+
     getInitialState: function() {
         return {
             weather: {}
         };
     },
 
-    refreshWeather: function() {
-        $.get("http://localhost:3000/weather", function(result) {
+    refreshWeather: function(location) {
+        location = location || this.props.location;
+
+        var locationCoords = this.latLongLookup[location];
+        $.get("http://localhost:3000/weather/" + locationCoords,
+                function(result) {
             this.setState({weather: result});
         }.bind(this));
     },
@@ -98,6 +131,12 @@ var WeatherWidget = React.createClass({
         if (typeof this.interval !== "undefined") {
             clearInterval(this.interval);
         }
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.refreshWeather(nextProps.location);
+        //TODO(colin): the old temperature info is displayed for a split second
+        //on the new location while the request completes.  Fix this.
     },
 
     render: function() {
@@ -114,7 +153,7 @@ var WeatherWidget = React.createClass({
                      {__html: (weather[this.props.weather] + weather.spacer)}
                  }/>
             <span className={styles.temperature.className}>
-                {Math.round(this.state.weather.temperature) + "\u00b0F"}
+                {this.getTemperatureString()}
             </span>
         </div>
     }
@@ -134,7 +173,7 @@ var LocationWidget = React.createClass({
                 {this.locationDisplayNames[this.props.location]}
             </div>
             <TimeDateWidget location={this.props.location}/>
-            <WeatherWidget weather='sunny'/>
+            <WeatherWidget weather='sunny' location={this.props.location}/>
         </div>
     },
 });
@@ -158,7 +197,14 @@ var HomeWidget = React.createClass({
         return {location: this.selectLocation()};
     },
     randomizeLocationState: function() {
-        this.setState({location: this.selectLocation()});
+        var newLocation = this.selectLocation();
+        if (newLocation != this.state.location) {
+            //TODO(colin): if I don't do this check, will react update the
+            //components if there's not a location change?  I don't want to
+            //update if the location doesn't change so that we don't run out of
+            //free weather API calls.
+            this.setState({location: this.selectLocation()});
+        }
     },
     render: function() {
         var location = this.state.location;

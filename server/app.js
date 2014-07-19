@@ -142,9 +142,9 @@ app.get('/at-all', function(req, res) {
 
 // Get current weather from Forecast.io
 // Limited to 1000 API calls per day
-app.get('/weather', function(req, res) {
+app.get('/weather/:location', function(req, res) {
     var url = ('https://api.forecast.io/forecast/' +
-               secrets.forecastAPIKey + '/37.389444,-122.081944');
+               secrets.forecastAPIKey + '/' + req.params.location);
     https.get(url, function(response) {
         var str = '';
         response.on('data', function(chunk) {
