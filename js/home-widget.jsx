@@ -51,6 +51,12 @@ var TimeDateWidget = React.createClass({
     componentDidMount: function() {
         this.interval = setInterval(this.getDateInTZ, this.updateTimeMs);
     },
+    
+    componentWillUnmount: function() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
+    },
 });
 
 // Weather refresh rate, in milliseconds
@@ -186,7 +192,14 @@ var HomeWidget = React.createClass({
         </WidgetContainer>
     },
     componentDidMount: function() {
-        setInterval(this.randomizeLocationState, this.locationSwitchTimeMs);
+        this.interval = setInterval(this.randomizeLocationState,
+            this.locationSwitchTimeMs);
+    },
+    
+    componentWillUnmount: function() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
     },
 });
 
