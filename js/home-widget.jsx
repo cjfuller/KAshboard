@@ -71,7 +71,7 @@ var LocationWidget = React.createClass({
 
 var HomeWidget = React.createClass({
     render: function() {
-        return <WidgetContainer sizeClass="doubleWide" color={colors.kaGreen}>
+        return <WidgetContainer sizeClass="doubleWide" color={colors.csDomainColor}>
             <div className={styles.imgHolder.className}>
                 <img alt="KA logo"
                     src="/images/khan-logo-vertical-transparent.png"/>
