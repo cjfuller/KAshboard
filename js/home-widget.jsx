@@ -96,6 +96,8 @@ var WeatherWidget = React.createClass({
             }.bind(this));
         } else {
             this.setState({weather: locationInfo[location].staticWeatherInfo});
+            skycons.set("skycon",
+                        locationInfo[location].staticWeatherInfo.icon);
         }
     },
 

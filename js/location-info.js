@@ -56,6 +56,7 @@ var locations = {
         weight: 0.01,
         staticWeatherInfo: {
             temperature: -233,
+            icon: "clear-night",
         }
     }
 }
