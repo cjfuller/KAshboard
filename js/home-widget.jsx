@@ -44,7 +44,7 @@ var TimeDateWidget = React.createClass({
                 {date.format("dddd MMMM DD, YYYY")}
             </div>
             <div className={styles.time.className}>
-                {date.format("h:mm:ss A")}
+                {date.format("h:mm A")}
             </div>
         </div>
     },

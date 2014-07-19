@@ -37,6 +37,7 @@ var weatherStyle = {
 var dateStyle = {
     fontSize: "1.5em",
 }
+
 var timeStyle = {
     fontSize: "3em",
 }
