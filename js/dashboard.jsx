@@ -22,9 +22,6 @@ var Dashboard = React.createClass({
             <StoriesWidget />
             <TeamWidget />
             <BigQueryWidget />
-            <WidgetContainer>
-            Testing wrapping...
-            </WidgetContainer>
             <AtAllWidget />
         </div>;
     }
