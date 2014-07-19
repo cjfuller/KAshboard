@@ -46,6 +46,14 @@ StoriesWidget = React.createClass({
         }
     },
 
+    truncateStory: function(story) {
+        var charLimit = 500;
+        var initialTruncation = story.story.substr(0, charLimit);
+        var cleanedUp = initialTruncation.substr(0,
+            initialTruncation.lastIndexOf(" "));
+        story.story = cleanedUp + "...";
+    },
+
     render: function() {
         if (this.state.stories.length === 0) {
             return <div>
@@ -55,11 +63,12 @@ StoriesWidget = React.createClass({
             </div>;
         }
         var story = this.state.stories[this.state.currentIdx];
+        this.truncateStory(story);
         return <WidgetContainer color={widgetColor}>
             <div className={styles.container.className}>
                 <div className={styles.title.className}>{story.name}</div>
                 <div>{story.formattedDate}</div>
-                <div>{story.story}</div>
+                <div className={styles.text.className}>{story.story}</div>
             </div>
         </WidgetContainer>
     }

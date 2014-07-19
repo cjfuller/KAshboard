@@ -11,6 +11,9 @@ var styles = {
     title: RCSS.registerClass(_.defaults({
         marginLeft: 0,
     }, vars.titleStyle)),
+    text: RCSS.registerClass({
+        marginTop: "10px",
+    }),
 };
 
 module.exports = styles;
