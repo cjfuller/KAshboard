@@ -26,16 +26,27 @@ StoriesWidget = React.createClass({
         };
     },
 
-    renderNextStory: function() {
-        var nextIdx = (this.state.currentIdx + 1) % this.state.stories.length;
-        this.setState({currentIdx: nextIdx});
+    refreshStories: function() {
+        $.get("http://localhost:3000/stories", function(result) {
+            // Reset to the first story if there's a new one. Otherwise, show
+            // the next story.
+            if (this.state.stories.length === 0 ||
+                result.stories[0].key !== this.state.stories[0].key) {
+                this.setState({
+                    stories: result.stories,
+                    currentIdx: 0
+                });
+            } else {
+                var nextIdx = ((this.state.currentIdx + 1) %
+                               this.state.stories.length);
+                this.setState({currentIdx: nextIdx});
+            }
+        }.bind(this));
     },
 
     componentDidMount: function() {
-        $.get("http://localhost:3000/stories", function(result) {
-            this.setState({stories: result.stories});
-            this.interval = setInterval(this.renderNextStory, INTERVAL_MS);
-        }.bind(this));
+        this.refreshStories();
+        this.interval = setInterval(this.refreshStories, INTERVAL_MS);
     },
 
     componentWillUnmount: function() {
