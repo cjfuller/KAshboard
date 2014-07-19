@@ -55,10 +55,9 @@ app.get('/github', function(req, res){
 // BigQuery stuff...
 // TODO(tony): prefix all this with "BQ" to avoid confusion
 
-// cache recent queries so that we don't repeatedly run them when we're
-// refreshing the page frequently in development
+// record last table update time, so we can update only occasionally
 
-var queryCache = {};
+var tableUpdateTimes = {};
 
 //TODO(colin): implement the cache
 
@@ -73,12 +72,15 @@ app.get('/bq-list', function (req, res) {
     });
 });
 
+
+var bqDataset = "dashboard_stats";
+
 // Execute a query
 // Sends err, results to the provided callback [optional].
 // Note that these results will be the response from bigquery and not the
 // actual computed results.
 var queryExec = function(query, destinationTable, callback) {
-    var dataset = "dashboard_stats";
+    var dataset = bqDataset;
     gapi.discover('bigquery', 'v2').execute(function(err, client) {
         var req = client.bigquery.jobs.insert({
            projectId: secrets.bqProjectId});
@@ -96,6 +98,30 @@ var queryExec = function(query, destinationTable, callback) {
                 }
             }
         };
+        req.withAuthClient(oauth2Client).execute(callback);
+    });
+};
+
+var readResults = function(sourceTable, maxResults, start, callback) {
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.tabledata.list({
+           projectId: secrets.bqProjectId,
+           datasetId: bqDataset,
+           tableId: sourceTable,
+           maxResults: maxResults,
+           startIndex: start,
+        });
+        req.withAuthClient(oauth2Client).execute(callback);
+    });
+};
+
+var getTableInfo = function(table, callback) {
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.tables.get({
+           projectId: secrets.bqProjectId,
+           datasetId: bqDataset,
+           tableId: table,
+        });
         req.withAuthClient(oauth2Client).execute(callback);
     });
 };
