@@ -6,7 +6,7 @@ var logoHeightPx = 250;
 
 var imgHolderStyle = {
     marginTop: ((styleVars.baseComponentHeight() - logoHeightPx)/2) + "px",
-    marginLeft: "25px",
+    marginLeft: "40px",
     width: "auto",
     float: "left",
 };
@@ -15,8 +15,8 @@ var locationWidgetStyle = {
 };
 
 var locationHolderStyle = {
-    paddingLeft: "100px",
-    paddingTop: "40px",
+    paddingLeft: "85px",
+    paddingTop: "50px",
     float: "left",
 };
 
