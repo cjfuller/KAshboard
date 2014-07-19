@@ -10,8 +10,9 @@
         "cheerio": "0.17.x",
         "express": "4.6.x",
         "googleapis": "0.8.x",
+        "google-bigquery": "0.1.x",
         "moment-timezone": "0.1.x",
-        "google-bigquery": "0.1.x"
+        "underscore": "1.6.x"
     },
     "devDependencies": {
         "beefy": "2.0.x",
@@ -19,8 +20,6 @@
         "rcss": "0.1.x",
         "react": "0.11.x",
         "reactify": "0.14.x",
-        "react": "0.11.x",
-        "underscore": "1.6.x",
         "watchify": "0.10.x"
     }
 }
