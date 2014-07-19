@@ -17,16 +17,11 @@ var async = require('async')
 
 var https = require('https');
 
-console.log(secrets.bqClientId);
-console.log(secrets.bqToken);
 var fs = require('fs');
 var bigquery = require('google-bigquery'),
     client = bigquery({
-        "iss": '124072386181-qqedvnl36ver0khc3pmqbh4bevlh58qd.apps.googleusercontent.com',
-        // "iss": secrets.bqClientId,
-        // "key": secrets.bqToken,
-        // "key": fs.readFileSync("/Users/tony/.bigquery.v2.token", "utf8")
-        "key": fs.readFileSync("/Users/tony/khan/analytics/client_secrets.json", "utf8")
+        "iss": secrets.bqClientId,
+        "key": fs.readFileSync("./bigquery.pem", "utf8")
     });
 
 app.get('/github', function(req, res){
@@ -51,15 +46,13 @@ app.get('/github', function(req, res){
 
 // BigQuery stuff...
 // TODO(tony): prefix all this with "BQ" to avoid confusion
-var projectNumber = secrets.bqProjectNumber;
-var clientId = secrets.bqClientId;
 
 // List tables
 app.get('/bq-list', function (req, res) {
     client.getProjects(function (err, projs) {
         console.log(projs);
         console.log(projs.projects); //list of projects.
-        res.send(proj.projects);
+        res.send(projs.projects);
     });
 });
 
