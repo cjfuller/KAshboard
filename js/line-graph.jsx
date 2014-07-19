@@ -6,34 +6,7 @@ var React = require("react");
 require("../third_party/highcharts.js");
 require("../third_party/highcharts-more.js");
 
-var HighchartOptions = {
-    credits: {
-        enabled: false
-    },
-    chart: {
-        type: "spline",
-        zoomType: "xy",
-    },
-    title: {
-        text: ""
-    },
-    xAxis: {
-    },
-    plotOptions: {
-        series: {
-            marker: {
-                radius: 2
-            }
-        }
-    },
-    tooltip: {
-        crosshairs: [true, true],
-        shared: true
-    },
-    global: {
-        useUTC: false
-    }
-};
+var HighchartOptions = require("./style/highcharts-style.js");
 
 var LineGraph = React.createClass(
     {
@@ -53,24 +26,13 @@ var LineGraph = React.createClass(
             this.plotIt();
         },
         plotIt: function() {
-            var config = {
-                chart: {},
-                yAxis: {
-                    labels: {
-                        formatter: function() {
-                            return this.value + "%";
-                        }
-                    }
-                },
-                tooltip: {
-                    valueDecimals: 1,
-                    valueSuffix: "%"
-                }
-            };
+            var config = this.props.config;
+            config.chart = config.chart || {};
             config.chart.renderTo = this.getDOMNode();
             config.series = this.props.series;
-            config.chart.title = "Chart title!";
-            config.yAxis.title = "It's a y-axis!";
+            if (this.props.series.length == 1) {
+                config.legend = {enabled: false};
+            }
             new Highcharts.Chart(config);
         },
     }

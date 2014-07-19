@@ -3,7 +3,7 @@
 var React = require("react");
 var RCSS = require("rcss");
 
-//var GAWidget = require("./ga-widget.jsx");
+var GAWidget = require("./ga-widget.jsx");
 var StoriesWidget = require("./stories-widget.jsx");
 var GHMetaWidget = require("./github-widget.jsx");
 var TeamWidget = require("./team-widget.jsx");
@@ -23,6 +23,7 @@ var Dashboard = React.createClass({
             <TeamWidget />
             <BigQueryWidget />
             <AtAllWidget />
+            <GAWidget />
         </div>;
     }
 });

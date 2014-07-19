@@ -2,7 +2,7 @@
 var React = require("react");
 var chartId = 'mychart';
 var LineGraph = require("./line-graph.jsx");
-
+var WidgetContainer = require("./widget-container.jsx");
 
 var GAWidget = React.createClass({
     getData: function() {
@@ -14,11 +14,27 @@ var GAWidget = React.createClass({
             type: "line",
             data: [{x: 1, y: 3}, {x: 2, y: -7}, {x: 3, y:22}]
         }]
+        var config = {
+            yAxis: {
+                title: {
+                    text: "Sample y-axis title",
+                }
+            },
+            xAxis: {
+                title: {
+                    text: "Sample x-axis title",
+                }
+            },
+            title: {
+                text: "Sample chart title",
+            }
+        }
         return (
+            <WidgetContainer>
             <div className="dashboard-widget">
-                Hi, I'm a widget!  My name is { this.props.name }.
-                <LineGraph series={ series }/>
+                <LineGraph series={series} config={config}/>
             </div>
+            </WidgetContainer>
         );
     },
 });
