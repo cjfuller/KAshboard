@@ -2,20 +2,18 @@
 var USER_AGENT = 'khan-dashboard-hack';
 var secrets = require('./secrets.js');
 
-var express = require('express');
-var app = express();
+var express = require('express')
+    , cors = require('cors')
+    , app = express();
 
 // Enable CORS
-var cors = require('cors');
 app.use(cors());
 
-var https = require('https');
-var querystring = require('querystring');
-
-var gapi = require('googleapis');
-
-var cheerio = require('cheerio');
-var async = require('async');
+var async = require('async')
+    , cheerio = require('cheerio')
+    , gapi = require('googleapis')
+    , https = require('https')
+    , querystring = require('querystring');
 
 app.get('/github', function(req, res){
     var options = {
