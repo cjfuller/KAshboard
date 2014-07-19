@@ -11,7 +11,7 @@ var colors = require('./style/ka-colors.js');
 var STORIES_COUNT = 20;
 
 // Time to show each story, in milliseconds
-var INTERVAL_MS = 10000;
+var INTERVAL_MS = 30000;
 
 var widgetColor = colors.mathSubjectColor;
 
