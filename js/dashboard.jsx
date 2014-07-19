@@ -23,9 +23,7 @@ var Dashboard = React.createClass({
             <WidgetContainer>
             Testing wrapping...
             </WidgetContainer>
-            <WidgetContainer>
-                <AtAllWidget />
-            </WidgetContainer>
+            <AtAllWidget />
         </div>;
     }
 });

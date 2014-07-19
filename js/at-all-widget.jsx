@@ -2,6 +2,8 @@
 
 var React = require("react");
 
+var WidgetContainer = require('./widget-container.jsx');
+
 // Refresh rate, in milliseconds
 var INTERVAL_MS = 10000;
 
@@ -44,9 +46,11 @@ AtAllWidget = React.createClass({
 
     render: function() {
         if (!this.state.hasLoaded) {
-            return <div>
-                <LoadingMessage />
-            </div>;
+            return <WidgetContainer>
+                <div>
+                    <LoadingMessage />
+                </div>
+            </WidgetContainer>;
         }
         if (!this.hasMessage()) {
             return <div>
@@ -54,12 +58,14 @@ AtAllWidget = React.createClass({
             </div>;
         }
         var message = this.state.message;
-        return <div>
-            <p>Latest @all in Khan Academy</p>
-            <p>{message.from.name} (@{message.from.mention_name})</p>
-            <p>{message.message}</p>
-            <p>{message.date}</p>
-        </div>;
+        return <WidgetContainer>
+            <div>
+                <p>Latest @all in Khan Academy</p>
+                <p>{message.from.name} (@{message.from.mention_name})</p>
+                <p>{message.message}</p>
+                <p>{message.date}</p>
+            </div>
+        </WidgetContainer>;
     }
 });
 
