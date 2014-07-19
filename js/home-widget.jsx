@@ -167,15 +167,13 @@ var HomeWidget = React.createClass({
         return {location: this.selectLocation()};
     },
     randomizeLocationState: function() {
-        var newLocation = this.selectLocation();
-        if (newLocation != this.state.location) {
-            //TODO(colin): if I don't do this check, will react update the
-            //components if there's not a location change?  I don't want to
-            //update if the location doesn't change so that we don't run out of
-            //free weather API calls.
-            this.setState({location: this.selectLocation()});
-        }
+        this.setState({location: this.selectLocation()});
     },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return nextState.location !== this.state.location;
+    },
+
     render: function() {
         var location = this.state.location;
         return <WidgetContainer sizeClass="doubleWide" color={colors.csDomainColor}>
