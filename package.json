@@ -5,6 +5,7 @@
         "start": "./node_modules/.bin/beefy js/main.jsx:js/main.js -- -t reactify"
     },
     "dependencies": {
+        "async": "0.9.x",
         "cors": "2.4.x",
         "cheerio": "0.17.x",
         "express": "4.6.x",

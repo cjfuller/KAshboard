@@ -15,6 +15,7 @@ var querystring = require('querystring');
 var gapi = require('googleapis');
 
 var cheerio = require('cheerio');
+var async = require('async');
 
 app.get('/github', function(req, res){
     var options = {
@@ -68,26 +69,39 @@ app.get('/bq-list', function(req, res) {
 // Get everyone on the team page
 // TODO(kevin): Add interns using async
 app.get('/team', function(req, res) {
-    var url = "https://www.khanacademy.org/about/the-team";
-    https.get(url, function(response) {
-        var str = '';
+    var getTeam = function(url, callback) {
+        https.get(url, function(response) {
+            var str = '';
 
-        response.on('data', function(chunk) {
-            str += chunk;
+            response.on('data', function(chunk) {
+                str += chunk;
+            });
+
+            response.on('end', function(chunk) {
+                var $ = cheerio.load(str);
+                var team = $('.team-card').map(function(i, employee) {
+                    return {
+                        name: $(employee).find('h2').text().trim(),
+                        title: $(employee).find('h3').text().trim(),
+                        imageUrl: $(employee).find('img').first().attr('src')
+                    };
+                }).toArray();
+                callback(null, team);
+            });
         });
+    };
 
-        response.on('end', function(chunk) {
-            var $ = cheerio.load(str);
-            var team = $('.team-card').map(function(i, employee) {
-                return {
-                    name: $(employee).find('h2').text().trim(),
-                    title: $(employee).find('h3').text().trim(),
-                    imageUrl: $(employee).find('img').first().attr('src')
-                };
-            }).toArray();
-
-            res.send(team);
-        });
+    async.parallel([
+        function(callback) {
+            var url = 'https://www.khanacademy.org/about/the-team';
+            getTeam(url, callback);
+        },
+        function(callback) {
+            var url = 'https://www.khanacademy.org/about/our-interns';
+            getTeam(url, callback);
+        }
+    ], function(err, results) {
+        res.send(results[0].concat(results[1]));
     });
 });
 
