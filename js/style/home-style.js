@@ -17,6 +17,7 @@ var locationHolderStyle = {
     paddingLeft: "65px",
     paddingTop: "50px",
     float: "left",
+    color: "black",
 };
 
 var titleStyle = {

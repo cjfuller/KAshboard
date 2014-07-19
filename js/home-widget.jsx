@@ -11,7 +11,7 @@ var styles = require("./style/home-style.js");
 
 // Animated weather icons
 var Skycons = require("../third_party/skycons.js").Skycons;
-var skycons = new Skycons({color: colors.grayExtraLight});
+var skycons = new Skycons();
 skycons.play();
 
 var weightedSelect = function(weights) {
