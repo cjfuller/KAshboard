@@ -144,7 +144,8 @@ app.get('/at-all', function(req, res) {
 // Limited to 1000 API calls per day
 app.get('/weather/:location', function(req, res) {
     var url = ('https://api.forecast.io/forecast/' +
-               secrets.forecastAPIKey + '/' + req.params.location);
+               secrets.forecastAPIKey + '/' + req.params.location +
+              '?units=' + (req.query.units || 'us'));
     https.get(url, function(response) {
         var str = '';
         response.on('data', function(chunk) {
