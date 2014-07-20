@@ -14,7 +14,7 @@ var INTERVAL_MS = 10000;
 /**
  * Displays the last @all or @here in the Khan Academy HipChat room.
  */
-AtAllWidget = React.createClass({
+HipChatWidget = React.createClass({
     getInitialState: function() {
         return {
             hasLoaded: false,
@@ -22,7 +22,7 @@ AtAllWidget = React.createClass({
         };
     },
 
-    getLatestAtAll: function() {
+    getLatestAnnouncement: function() {
         $.get("http://localhost:3000/at-all", function(result) {
             // Always show the last cached @all, don't replace with the "No
             // recent @alls" message.
@@ -34,8 +34,8 @@ AtAllWidget = React.createClass({
     },
 
     componentDidMount: function() {
-        this.getLatestAtAll();
-        this.interval = setInterval(this.getLatestAtAll, INTERVAL_MS);
+        this.getLatestAnnouncement();
+        this.interval = setInterval(this.getLatestAnnouncement, INTERVAL_MS);
     },
 
     componentWillUnmount: function() {
@@ -82,4 +82,4 @@ AtAllWidget = React.createClass({
     }
 });
 
-module.exports = AtAllWidget;
+module.exports = HipChatWidget;

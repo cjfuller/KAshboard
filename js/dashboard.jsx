@@ -9,7 +9,7 @@ var GHMetaWidget = require("./github-widget.jsx");
 var TeamWidget = require("./team-widget.jsx");
 var ExperimentsWidget = require("./experiments-widget.jsx");
 var WidgetContainer = require("./widget-container.jsx");
-var AtAllWidget = require("./at-all-widget.jsx");
+var AtAllWidget = require("./hipchat-widget.jsx");
 var HomeWidget = require("./home-widget.jsx");
 var RegistrationsWidget = require("./registrations-widget.jsx");
 var RegistrationsGraphWidget = require("./registrations-graph-widget.jsx");
@@ -27,7 +27,7 @@ var Dashboard = React.createClass({
             <TweetsWidget />
             <ErrorGraphWidget />
             <TeamWidget />
-            <AtAllWidget />
+            <HipChatWidget />
             <ExperimentsWidget />
             <RegistrationsGraphWidget />
             <RegistrationsWidget />
