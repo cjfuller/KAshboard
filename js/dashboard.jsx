@@ -4,6 +4,7 @@ var RCSS = require("rcss");
 var React = require("react");
 
 var AtAllWidget = require("./hipchat-widget.jsx");
+var DeployWidget = require("./deploy-widget.jsx");
 var ErrorGraphWidget = require("./error-graph-widget.jsx");
 var ExperimentsWidget = require("./experiments-widget.jsx");
 var GAWidget = require("./ga-widget.jsx");
@@ -37,6 +38,7 @@ var Dashboard = React.createClass({
                 </div>;
             case 2:
                 return <div className={dashboardClass.className}>
+                    <DeployWidget />
                 </div>;
             default:
                 return <div className={dashboardClass.className}>

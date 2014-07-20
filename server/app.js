@@ -16,6 +16,7 @@ app.use(cors());
 var async = require('async')
     , cheerio = require('cheerio')
     , gapi = require('googleapis')
+    , http = require('http')
     , https = require('https')
     , OAuth = require('oauth')
     , querystring = require('querystring');
@@ -401,6 +402,24 @@ app.get('/recent_experiments', function(req, res) {
             res.send(JSON.parse(data));
         }
     );
+});
+
+// Returns info about the last deploy-via-multijob build
+app.get('/deploy', function(req, res) {
+    var options = {
+        hostname: 'jenkins.khanacademy.org',
+        path: '/job/deploy-via-multijob/lastBuild/api/json?pretty=true',
+        auth: secrets.jenkinsUserId + ':' + secrets.jenkinsAPIToken
+    };
+    http.get(options, function(response) {
+        var str = '';
+        response.on('data', function(chunk) {
+            str += chunk;
+        });
+        response.on('end', function(chunk) {
+            res.send(JSON.parse(str));
+        });
+    });
 });
 
 app.listen(3000);
