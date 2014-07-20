@@ -9,6 +9,7 @@ var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 
 var kaColors = require("./style/ka-colors.js");
+var projection = require("./registration-projection.js");
 var styleVars = require("./style/style-vars.js");
 
 var INTERVAL_MS = 10000;
@@ -24,7 +25,7 @@ var RegistrationsGraphWidget = React.createClass({
                     var timeMs = moment(k, "YYYY-MM").valueOf();
                     return {x: timeMs, y: parseInt(v)};
                 });
-                this.setState({data: data})
+                this.setState({data: data, raw: result.registrations})
             }
         }.bind(this));
     },
@@ -54,6 +55,10 @@ var RegistrationsGraphWidget = React.createClass({
                 <LoadingMessage />
             </WidgetContainer>;
         }
+        var data = this.state.data;
+        // add in the projection, assuming points are ordered by time
+        _.last(this.state.data).y +=
+            projection(this.state.raw).imaginaryRegistrations;
         var series = [{
             name: "new registrations",
             type: "spline",

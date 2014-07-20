@@ -7,6 +7,7 @@ var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 
 var kaColors = require("./style/ka-colors.js");
+var projection = require("./registration-projection.js");
 var styles = require("./style/registrations-widget-style.js");
 var util = require("./util.js");
 
@@ -18,44 +19,9 @@ var RegistrationsWidget = React.createClass({
         var url = "http://localhost:3000/registrations";
         $.get(url, function(result) {
             if (result.registrations) {
-                var now = moment();
-                var thisMonth = moment([now.year(), now.month()]);
-                var thisMonthStr = thisMonth.format("YYYY-MM");
-                var registrations = (
-                    parseInt(result.registrations[thisMonthStr]) || 0
-                );
-                if (this.state.registrations !== registrations) {
-                    this.setState({imaginaryRegistrations: 0});
-                }
-
-                // Calculate registration rate from last month's stats
-                var lastMonth = moment([now.year(), now.month() - 1]);
-                var lastMonthStr = lastMonth.format("YYYY-MM");
-                var registrationsLastMonth = (
-                    parseInt(result.registrations[lastMonthStr])
-                );
-                var secondsInMonth = thisMonth.diff(lastMonth) / 1000;
-                var registrationsPerSecond = (registrationsLastMonth /
-                                              secondsInMonth);
-
-                // Find last Saturday, midnight Pacific time.
-                // Use the previous one if the reports pipeline hasn't run yet
-                // (Monday AM).
-                var backupDay = moment().clone().tz("America/Los_Angeles");
-                backupDay = backupDay.startOf("week").subtract("day", 1);
-                if (now.day() === 0) {
-                    backupDay = backupDay.subtract("week", 1);
-                }
-
-                var imaginaryRegistrations = registrationsPerSecond *
-                    (now.valueOf() - backupDay.valueOf())/1000;
-
-                this.setState({
-                    loaded: true,
-                    registrations: registrations,
-                    registrationsPerSecond: registrationsPerSecond,
-                    imaginaryRegistrations: imaginaryRegistrations,
-                });
+                var calculatedState = projection(result.registrations);
+                calculatedState.loaded = true;
+                this.setState(calculatedState);
             }
         }.bind(this));
     },
