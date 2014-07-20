@@ -27,7 +27,11 @@ var HighchartOptions = {
         },defaultTextStyle),
     },
     legend: {
-        style: defaultTextStyle,
+        style: _.defaults({
+            borderWidth: 0,
+            borderColor: "rgba(0,0,0,0)",
+            strokeWidth: 0,
+        }, defaultTextStyle),
         itemStyle: defaultTextStyle,
         title: {
             style: defaultTextStyle

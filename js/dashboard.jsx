@@ -25,12 +25,12 @@ var Dashboard = React.createClass({
             <GHMetaWidget/>
             <StoriesWidget />
             <TweetsWidget />
-            <ErrorGraphWidget />
             <TeamWidget />
             <HipChatWidget />
-            <ExperimentsWidget />
+            <ErrorGraphWidget />
             <RegistrationsGraphWidget />
             <RegistrationsWidget />
+            <ExperimentsWidget />
         </div>;
     }
 });

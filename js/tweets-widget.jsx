@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var _ = require("underscore");
 
 var WidgetContainer = require("./widget-container.jsx");
+var style = require("./style/twitter-style.js");
 
 // Refresh rate, in milliseconds
 var INTERVAL_MS = 30000;
@@ -19,14 +21,20 @@ var Tweet = React.createClass({
 
     render: function() {
         var tweet = this.props.tweet;
-        return <div>
-            <img src={tweet.user.profile_image_url} />
-            <div>
-                <strong>{tweet.user.name}</strong>
-                {" "}
-                (@{tweet.user.screen_name})
+        return <div className={style.tweetContainer.className}>
+            <div className={style.idInfo.className}>
+                <div className={style.imgHolder.className}>
+                    <img src={tweet.user.profile_image_url} />
+                </div>
+                <div className={style.name.className}>
+                    <strong>{tweet.user.name}</strong>
+                    {" "}
+                    (@{tweet.user.screen_name})
+                </div>
             </div>
-            <div>{tweet.text}</div>
+            <div className={style.tweet.className}>
+                {tweet.text}
+            </div>
         </div>;
     }
 });
@@ -58,8 +66,12 @@ var TweetsWidget = React.createClass({
             return <Tweet tweet={tweet} key={tweet.id} />;
         });
 
+        tweets = _.first(tweets, 5);
+
         return <WidgetContainer sizeClass="doubleTall">
-            {tweets}
+            <div className={style.container.className}>
+                {tweets}
+            </div>
         </WidgetContainer>;
     }
 });
