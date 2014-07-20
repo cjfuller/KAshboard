@@ -24,7 +24,7 @@ var Dashboard = React.createClass({
     render: function() {
         var screen = parseInt(util.getParameterByName("screen"));
         switch (screen) {
-            case 0:
+            case 1:
                 return <div className={dashboardClass.className}>
                     <HomeWidget/>
                     <GHMetaWidget/>
@@ -37,13 +37,13 @@ var Dashboard = React.createClass({
                     <RegistrationsWidget />
                     <ExperimentsWidget />
                 </div>;
-            case 1:
+            case 2:
                 return <div className={dashboardClass.className}>
                 </div>;
             default:
                 return <div className={dashboardClass.className}>
-                    <ScreenSelectorWidget screen={0} />
                     <ScreenSelectorWidget screen={1} />
+                    <ScreenSelectorWidget screen={2} />
                 </div>;
         }
     }
