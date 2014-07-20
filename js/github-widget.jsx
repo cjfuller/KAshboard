@@ -72,7 +72,9 @@ var ChangelistWidget = React.createClass({
                 </div>
                 <div className={styles.changelistClass.className}>
                     {changeList}
-                    <strong>+{this.props.nRecent} more</strong>
+                    <strong>
+                        +{this.props.nRecent - changeList.length} more
+                    </strong>
                 </div>
             </WidgetContainer>
         );
@@ -154,9 +156,8 @@ var GHWidget = React.createClass({
         if (this.state.data === undefined) {
             return null;
         }
-        _.filter(this.state.data, function(d) {
-            var dayMs = 86400000;
-            return (moment().subtract('1', 'day')
+        return _.filter(this.state.data, function(d) {
+            return (moment().subtract('days', 1)
                     .isBefore(moment(d.commit.author.date)));
         }).length;
     },
