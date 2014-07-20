@@ -38,10 +38,18 @@ var RegistrationsWidget = React.createClass({
                 var registrationsPerSecond = (registrationsLastMonth /
                                               secondsInMonth);
 
+                // Find last Saturday, midnight Pacific time.
+                var backupDay = moment().clone().tz("America/Los_Angeles");
+                backupDay = backupDay.startOf("week").subtract("day", 1);
+
+                var imaginaryRegistrations = registrationsPerSecond *
+                    (now.valueOf() - backupDay.valueOf())/1000;
+
                 this.setState({
                     loaded: true,
                     registrations: registrations,
-                    registrationsPerSecond: registrationsPerSecond
+                    registrationsPerSecond: registrationsPerSecond,
+                    imaginaryRegistrations: imaginaryRegistrations,
                 });
             }
         }.bind(this));
