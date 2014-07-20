@@ -5,19 +5,18 @@
 var React = require('react');
 var WidgetContainer = require('./widget-container.jsx');
 
-var BigQuery = React.createClass({
+var Experiments = React.createClass({
 
     getInitialState: function() {
         return {
-            table: null
+            experiments: null
         };
     },
 
     componentDidMount: function() {
-        $.get('http://localhost:3000/bq-list',
+        $.get('http://localhost:3000/recent_experiments',
             function(result) {
-                console.log(result);
-                this.setState({table: result});
+                this.setState({experiments: result});
             }.bind(this)
         );
     },
@@ -33,11 +32,11 @@ var BigQuery = React.createClass({
 
         return (<div>
                 <WidgetContainer>
-                    {this.state.table}
+                    {this.state.experiments}
                 </WidgetContainer>
             </div>
         );
     }
 });
 
-module.exports = BigQuery;
+module.exports = Experiments;
