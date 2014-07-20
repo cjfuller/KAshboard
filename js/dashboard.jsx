@@ -16,14 +16,12 @@ var RegistrationsGraphWidget = require("./registrations-graph-widget.jsx");
 var ErrorGraphWidget = require("./error-graph-widget.jsx");
 var TweetsWidget = require("./tweets-widget.jsx");
 var ScreenSelectorWidget = require("./screen-selector-widget.jsx");
-var util = require("./util.js");
 
 var dashboardClass = require("./style/dashboard-style.js");
 
 var Dashboard = React.createClass({
     render: function() {
-        var screen = parseInt(util.getParameterByName("screen"));
-        switch (screen) {
+        switch (this.props.screen) {
             case 1:
                 return <div className={dashboardClass.className}>
                     <HomeWidget/>
