@@ -9,7 +9,7 @@ var util = require("./util.js");
 
 var INTERVAL_MS = 10000;
 
-var FingersCrossedWidget = React.createClass({
+var RegistrationsWidget = React.createClass({
 
     getRegistrationCounts: function() {
         var now = moment();
@@ -80,4 +80,4 @@ var FingersCrossedWidget = React.createClass({
     }
 });
 
-module.exports = FingersCrossedWidget;
+module.exports = RegistrationsWidget;
