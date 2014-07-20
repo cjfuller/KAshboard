@@ -172,6 +172,18 @@ var kaOAuth = new OAuth.OAuth(
     'HMAC-SHA1'
 );
 
+// Returns true if the given story is probably not spam
+var isProbablyNotSpam = function(story) {
+    var storyStr = story.story.toLowerCase();
+    if (storyStr.length < 5) {
+        return false;
+    }
+    if (storyStr.indexOf('loan amount') >= 0) {
+        return false;
+    }
+    return true;
+};
+
 // Get latest stories, including unpublished
 app.get('/stories', function(req, res) {
     kaOAuth.get(
@@ -180,7 +192,9 @@ app.get('/stories', function(req, res) {
         secrets.kaAccessToken,
         secrets.kaAccessTokenSecret,
         function(e, data) {
-            res.send(JSON.parse(data));
+            var dataObj = JSON.parse(data);
+            dataObj.stories = _.filter(dataObj.stories, isProbablyNotSpam);
+            res.send(dataObj);
         }
     );
 });
