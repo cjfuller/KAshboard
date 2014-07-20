@@ -152,7 +152,7 @@ var GHWidget = React.createClass({
 
         return (
             <div className={styles.ghStyleClass.className}>
-                <WidgetContainer>
+                <WidgetContainer color={kaColors.testPrepDomainColor}>
                     <ChangelistWidget changelog={changelog} 
                         nRecent={recentCommitCount}/>
                 </WidgetContainer>

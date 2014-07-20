@@ -1,13 +1,15 @@
-/** @jsx React.DOM */
+7/** @jsx React.DOM */
 
 var React = require("react");
 var _ = require("underscore");
 
 var WidgetContainer = require("./widget-container.jsx");
 var style = require("./style/twitter-style.js");
+var kaColors = require("./style/ka-colors.js");
 
 // Refresh rate, in milliseconds
 var INTERVAL_MS = 30000;
+var widgetColor = kaColors.defaultDomainColor;
 
 /**
  * Represents a single tweet in the Tweets widget.
@@ -57,7 +59,7 @@ var TweetsWidget = React.createClass({
 
     render: function() {
         if (typeof this.state.tweets.statuses !== 'object') {
-            return <WidgetContainer sizeClass="doubleTall">
+            return <WidgetContainer color={widgetColor} sizeClass="doubleTall">
                 <LoadingMessage />
             </WidgetContainer>;
         }
@@ -68,7 +70,7 @@ var TweetsWidget = React.createClass({
 
         tweets = _.first(tweets, 5);
 
-        return <WidgetContainer sizeClass="doubleTall">
+        return <WidgetContainer color={widgetColor} sizeClass="doubleTall">
             <div className={style.container.className}>
                 {tweets}
             </div>

@@ -14,8 +14,9 @@ var imgHolderStyle = {
 
 var nameStyle = {
     paddingLeft: "15px",
-    paddingTop: "15px",
+    paddingTop: "5px",
     float: "left",
+    width: "80%",
 };
 
 var idInfoStyle = {

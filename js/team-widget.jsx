@@ -8,6 +8,7 @@ var styles = require("./style/team-style.js");
 
 // Time to show each employee, in milliseconds
 var INTERVAL_MS = 10000;
+var widgetColor = kaColors.humanitiesDomainColor;
 
 /**
  * Displays name and picture of a random member of the team.
@@ -43,13 +44,13 @@ TeamWidget = React.createClass({
     render: function() {
         if (this.state.team.length === 0) {
             return <div>
-                <WidgetContainer color={kaColors.testPrepDomainColor}>
+                <WidgetContainer color={widgetColor}>
                     <LoadingMessage />
                 </WidgetContainer>
             </div>;
         }
         var employee = this.state.team[this.state.currentIdx];
-        return <WidgetContainer color={kaColors.testPrepDomainColor}>
+        return <WidgetContainer color={widgetColor}>
             <div className={styles.container.className}>
                 <div className={styles.title.className}>
                     The Team

@@ -12,6 +12,7 @@ var styles = require("./style/team-style.js");
 
 // Time to show each experiment, in milliseconds
 var INTERVAL_MS = 10000;
+var widgetColor = kaColors.csDomainColor;
 
 var Experiments = React.createClass({
 
@@ -46,13 +47,13 @@ var Experiments = React.createClass({
 
     render: function() {
         if (this.state.experiments.length == 0) {
-            return <WidgetContainer>
+            return <WidgetContainer color={widgetColor}>
                 <LoadingMessage />
             </WidgetContainer>;
         }
 
         var exp = this.state.experiments[this.state.idx];
-        return (<WidgetContainer>
+        return (<WidgetContainer color={widgetColor}>
             <div className={styles.container.className}>
                 <h2>Current Experiments</h2>
                 <h3>{exp.display_name}</h3>
