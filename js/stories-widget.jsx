@@ -10,7 +10,7 @@ var colors = require('./style/ka-colors.js');
 // Time to show each story, in milliseconds
 var INTERVAL_MS = 30000;
 
-var widgetColor = colors.mathSubjectColor;
+var widgetColor = colors.mathDomainColor;
 
 /**
  * Cycles through the latest submitted stories on KA.
