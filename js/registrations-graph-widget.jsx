@@ -12,7 +12,7 @@ var kaColors = require("./style/ka-colors.js");
 var projection = require("./registration-projection.js");
 var styleVars = require("./style/style-vars.js");
 
-var INTERVAL_MS = 10000;
+var INTERVAL_MS = 30000;
 
 var RegistrationsGraphWidget = React.createClass({
     getData: function() {
