@@ -5,6 +5,7 @@ var moment = require("moment-timezone");
 var styles = require("./style/registrations-widget-style.js");
 var WidgetContainer = require("./widget-container.jsx");
 var kaColors = require("./style/ka-colors.js");
+var util = require("./util.js");
 
 var INTERVAL_MS = 10000;
 
@@ -40,7 +41,7 @@ var FingersCrossedWidget = React.createClass({
             <WidgetContainer color={kaColors.economicsDomainColor}>
                 <div className={styles.container.className}>
                     <div className={styles.number.className}>
-                        {this.state.registrations}
+                        {util.numberWithCommas(this.state.registrations)}
                     </div>
                     <div className={styles.caption.className}>
                         number of registrations so far this month
