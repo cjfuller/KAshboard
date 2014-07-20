@@ -9,20 +9,28 @@ var Experiments = React.createClass({
 
     getInitialState: function() {
         return {
-            experiments: null
+            experiments: [],
+            idx: null,
         };
+    },
+
+    displayRandomExperiment: function() {
+        var nextIdx = Math.floor(Math.random() * this.state.experiments.length);
+        this.setState({idx: nextIdx});
     },
 
     componentDidMount: function() {
         $.get('http://localhost:3000/recent_experiments',
             function(result) {
                 this.setState({experiments: result});
+                this.displayRandomExperiment();
+                this.interval = setInterval(this.displayRandomExperiment, 10000);
             }.bind(this)
         );
     },
 
     render: function() {
-        if (!this.state.experiments) {
+        if (this.state.experiments.length == 0) {
             return <div>
                 <WidgetContainer>
                     <LoadingMessage />
@@ -30,9 +38,10 @@ var Experiments = React.createClass({
             </div>;
         }
 
+        var exp = this.state.experiments[this.state.idx];
         return (<div>
                 <WidgetContainer>
-                    {this.state.experiments}
+                    {exp}
                 </WidgetContainer>
             </div>
         );
