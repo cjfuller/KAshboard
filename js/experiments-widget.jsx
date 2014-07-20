@@ -6,6 +6,8 @@ var React = require('react');
 var WidgetContainer = require('./widget-container.jsx');
 
 var kaColors = require("./style/ka-colors.js");
+
+// TODO(tony): move this out into its own style file...
 var styles = require("./style/team-style.js");
 
 var Experiments = React.createClass({
@@ -47,11 +49,16 @@ var Experiments = React.createClass({
 
         var exp = this.state.experiments[this.state.idx];
         return (<WidgetContainer>
-                <h1>Current Experiments</h1>
-                <h2>{exp.display_name}</h2>
-                <div>
+            <div className={styles.container.className}>
+                <h2>Current Experiments</h2>
+                <h3>{exp.display_name}</h3>
+                <h4>
+                Owner: {exp.owner}
+                </h4>
+                <p>
                     {exp.description}
-                </div>
+                </p>
+            </div>
             </WidgetContainer>
         );
     }
