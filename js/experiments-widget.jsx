@@ -22,7 +22,7 @@ var Experiments = React.createClass({
     },
 
     render: function() {
-        if (!this.state.table) {
+        if (!this.state.experiments) {
             return <div>
                 <WidgetContainer>
                     <LoadingMessage />
