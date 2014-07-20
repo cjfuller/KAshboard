@@ -21,13 +21,14 @@ var RegistrationsGraphWidget = React.createClass({
                     var timeMs = moment(k, "YYYY-MM").valueOf();
                     return {x: timeMs, y: parseInt(v)};
                 });
-                // don't redraw the graph on every poll interval
-                if (!_.last(this.state.data) ||
-                    (_.last(this.state.data).y != _.last(data).y)) {
-                        this.setState({data: data})
-                }
+                this.setState({data: data})
             }
         }.bind(this));
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (!_.last(this.state.data) ||
+                (_.last(this.state.data).y != _.last(nextState.data).y));
     },
 
     getInitialState: function() {

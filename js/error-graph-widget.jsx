@@ -29,17 +29,20 @@ var ErrorGraphWidget = React.createClass({
                     var errs = (v[5] && parseInt(v[5])/3600.0) || 0;
                     return {x: timeMs, y: parseInt(v[5])/3600.0};
                 });
-                var data = {
-                    client: series4xx,
-                    server: series5xx,
-                }
-                // don't redraw the graph on every poll interval
-                if (!_.last(this.state.data.client) ||
-                    (_.last(this.state.data.client).y != _.last(series4xx).y)){
-                        this.setState({data: data});
-                }
+                this.setState({
+                    data: {
+                        client: series4xx,
+                        server: series5xx,
+                    }
+                });
             }
         }.bind(this));
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        return (!_.last(this.state.data.client) ||
+                (_.last(this.state.data.client).y !=
+                 _.last(nextState.data.client).y));
     },
 
     getInitialState: function() {
