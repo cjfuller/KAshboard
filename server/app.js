@@ -344,4 +344,25 @@ app.get('/error_counts', function(req, res) {
 });
 
 
+// Get Twitter search results for @khanacademy
+app.get('/tweets', function(req, res) {
+    var oauth = new OAuth.OAuth(
+        'https://api.twitter.com/oauth/request_token',
+        'https://api.twitter.com/oauth/access_token',
+        secrets.twitterConsumerKey,
+        secrets.twitterConsumerSecret,
+        '1.0A',
+        null,
+        'HMAC-SHA1'
+    );
+    oauth.get(
+        'https://api.twitter.com/1.1/search/tweets.json?q=%40khanacademy',
+        secrets.twitterAccessToken,
+        secrets.twitterAccessTokenSecret,
+        function(e, data) {
+            res.send(JSON.parse(data));
+        }
+    );
+});
+
 app.listen(3000);

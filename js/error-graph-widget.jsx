@@ -84,7 +84,7 @@ var ErrorGraphWidget = React.createClass({
                 text: "khanacademy.org Error Rates",
             },
             chart: {
-                height: styleVars.baseComponentHeight() * 2 +
+                height: styleVars.baseComponentHeight() +
                     styleVars.gridSpacing,
                 width: styleVars.baseComponentWidth() * 2 +
                     styleVars.gridSpacing,
@@ -92,10 +92,10 @@ var ErrorGraphWidget = React.createClass({
             colors: [kaColors.csTopicColor, kaColors.economicsTopicColor],
         }
         return (
-            <WidgetContainer sizeClass="doubleDouble">
-            <div className="dashboard-widget">
-                <LineGraph series={series} config={config}/>
-            </div>
+            <WidgetContainer sizeClass="doubleWide">
+                <div className="dashboard-widget">
+                    <LineGraph series={series} config={config}/>
+                </div>
             </WidgetContainer>
         );
     },
