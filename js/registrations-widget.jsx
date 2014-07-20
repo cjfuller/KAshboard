@@ -17,7 +17,7 @@ var FingersCrossedWidget = React.createClass({
         $.get(url, function(result) {
             if (result.registrations) {
                 this.setState({
-                    registrations: result.registrations[thisMonth],
+                    registrations: result.registrations[thisMonth] || 0,
                 });
             }
         }.bind(this));
