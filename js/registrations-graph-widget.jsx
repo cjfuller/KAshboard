@@ -71,11 +71,11 @@ var RegistrationsGraphWidget = React.createClass({
                 width: styleVars.baseComponentWidth() * 2 +
                     styleVars.gridSpacing,
             },
-            colors: [kaColors.kaGreen],
+            colors: [kaColors.scienceTopicColor],
         }
         return (
             <WidgetContainer sizeClass="doubleWide"
-                             color={kaColors.defaultDomainColor}>
+                             color={kaColors.mathDomainColor}>
             <div className="dashboard-widget">
                 <LineGraph series={series} config={config}/>
             </div>

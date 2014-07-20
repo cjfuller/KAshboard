@@ -89,11 +89,10 @@ var ErrorGraphWidget = React.createClass({
                 width: styleVars.baseComponentWidth() * 2 +
                     styleVars.gridSpacing,
             },
-            colors: [kaColors.testPrepDomainColor],
+            colors: [kaColors.csTopicColor, kaColors.economicsTopicColor],
         }
         return (
-            <WidgetContainer sizeClass="doubleDouble"
-                             color={kaColors.mathDomainColor}>
+            <WidgetContainer sizeClass="doubleDouble">
             <div className="dashboard-widget">
                 <LineGraph series={series} config={config}/>
             </div>
