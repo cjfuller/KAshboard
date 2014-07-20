@@ -28,17 +28,17 @@ var ExperimentsWidget = React.createClass({
     componentDidMount: function() {
         $.get('http://localhost:3000/recent_experiments',
             function(result) {
-                var filtered_results = [];
+                var filteredResults = [];
                 for (var i = 0; i < result.length; i++) {
                     var exp = result[i];
                     // A hack for the hackathon
                     if (exp.description.substring(1, 5) !== 'Know') {
                         exp.description = this.truncateExperiment(exp.description);
-                        filtered_results.push(exp);
+                        filteredResults.push(exp);
                     }
                 }
 
-                this.setState({experiments: filtered_results});
+                this.setState({experiments: filteredResults});
                 this.displayRandomExperiment();
                 this.interval = setInterval(this.displayRandomExperiment,
                                             INTERVAL_MS);
