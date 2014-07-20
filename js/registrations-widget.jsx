@@ -12,21 +12,28 @@ var INTERVAL_MS = 10000;
 var RegistrationsWidget = React.createClass({
 
     getRegistrationCounts: function() {
-        var now = moment();
-        var thisMonth = now.format("YYYY-MM");
         var url = "http://localhost:3000/registrations";
         $.get(url, function(result) {
             if (result.registrations) {
+                var now = moment();
+                var thisMonth = moment([now.year(), now.month()]);
+                var thisMonthStr = thisMonth.format("YYYY-MM");
                 var registrations = (
-                    parseInt(result.registrations[thisMonth]) || 0
+                    parseInt(result.registrations[thisMonthStr]) || 0
                 );
                 if (this.state.registrations !== registrations) {
                     this.setState({imaginaryRegistrations: 0});
                 }
 
-                var beginningOfMonth = moment(thisMonth + "-01");
-                var secondsIntoMonth = now.diff(beginningOfMonth) / 1000;
-                var registrationsPerSecond = registrations / secondsIntoMonth;
+                // Calculate registration rate from last month's stats
+                var lastMonth = moment([now.year(), now.month() - 1]);
+                var lastMonthStr = lastMonth.format("YYYY-MM");
+                var registrationsLastMonth = (
+                    parseInt(result.registrations[lastMonthStr])
+                );
+                var secondsInMonth = thisMonth.diff(lastMonth) / 1000;
+                var registrationsPerSecond = (registrationsLastMonth /
+                                              secondsInMonth);
 
                 this.setState({
                     registrations: registrations,
