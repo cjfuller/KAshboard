@@ -31,20 +31,15 @@ var Experiments = React.createClass({
 
     render: function() {
         if (this.state.experiments.length == 0) {
-            return <div>
-                <WidgetContainer>
-                    <LoadingMessage />
-                </WidgetContainer>
-            </div>;
+            return <WidgetContainer>
+                <LoadingMessage />
+            </WidgetContainer>;
         }
 
         var exp = this.state.experiments[this.state.idx];
-        return (<div>
-                <WidgetContainer>
-                    {exp}
-                </WidgetContainer>
-            </div>
-        );
+        return <WidgetContainer>
+            {exp}
+        </WidgetContainer>;
     }
 });
 
