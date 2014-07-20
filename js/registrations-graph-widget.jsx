@@ -50,6 +50,7 @@ var RegistrationsGraphWidget = React.createClass({
             name: "new registrations",
             type: "spline",
             data: this.state.data,
+            lineWidth: "3px",
         }]
         var config = {
             yAxis: {
