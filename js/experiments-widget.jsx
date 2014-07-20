@@ -31,9 +31,9 @@ var ExperimentsWidget = React.createClass({
                 var filtered_results = [];
                 for (var i = 0; i < result.length; i++) {
                     var exp = result[i];
-                    if (exp.description.length < 300
-                            // A hack for the hackathon
-                            && exp.description.substring(1, 5) !== 'Know') {
+                    // A hack for the hackathon
+                    if (exp.description.substring(1, 5) !== 'Know') {
+                        exp.description = this.truncateExperiment(exp.description);
                         filtered_results.push(exp);
                     }
                 }
@@ -44,6 +44,17 @@ var ExperimentsWidget = React.createClass({
                                             INTERVAL_MS);
             }.bind(this)
         );
+    },
+
+    truncateExperiment: function(description) {
+        var charLimit = 300;
+        if (description.length > charLimit) {
+            var initialTruncation = description.substr(0, charLimit);
+            var cleanedUp = initialTruncation.substr(0,
+                initialTruncation.lastIndexOf(" "));
+            return cleanedUp + "...";
+        }
+        return description;
     },
 
     componentWillUnmount: function() {
