@@ -10,6 +10,9 @@ var kaColors = require("./style/ka-colors.js");
 // TODO(tony): move this out into its own style file...
 var styles = require("./style/team-style.js");
 
+// Time to show each experiment, in milliseconds
+var INTERVAL_MS = 10000;
+
 var Experiments = React.createClass({
 
     getInitialState: function() {
@@ -29,7 +32,8 @@ var Experiments = React.createClass({
             function(result) {
                 this.setState({experiments: result});
                 this.displayRandomExperiment();
-                this.interval = setInterval(this.displayRandomExperiment, 10000);
+                this.interval = setInterval(this.displayRandomExperiment,
+                                            INTERVAL_MS);
             }.bind(this)
         );
     },
