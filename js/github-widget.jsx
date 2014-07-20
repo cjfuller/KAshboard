@@ -79,8 +79,8 @@ var GHWidget = React.createClass({
     extractChanges: function(commit) {
         var name = commit.commit.author.name;
         var message = commit.commit.message;
-        
-        // Drop the commit if jenkins is the author or [auto] is in the 
+
+        // Drop the commit if jenkins is the author or [auto] is in the
         // message.
         var jenkins = "Jenny Jenkins";
         var isMergeCommit = commit.parents.length > 1;
@@ -88,7 +88,7 @@ var GHWidget = React.createClass({
                 message.match(jenkins) || isMergeCommit) {
             return null;
         }
-        
+
         // Extract the first name
         name = name.split(" ");
         var displayName = name[0];
@@ -96,17 +96,17 @@ var GHWidget = React.createClass({
         if (displayName.match("^Ben") && name[1]) {
             displayName = "B. " + name[1];
         }
-        
+
         // Get first line of commit message
         var shortMessage = message.split("\n")[0];
-    
+
         return {
             name: displayName,
             text: shortMessage,
             key: commit.sha.substr(0, 8)
         };
-        
-        
+
+
     },
     render: function() {
         if (this.state.data.length === 0) {
@@ -119,12 +119,12 @@ var GHWidget = React.createClass({
         var changelog = _.map(this.state.data, function(c) {
                 return this.extractChanges(c);
             }.bind(this));
-        
+
         var recentCommitCount = _.filter(this.state.data, function(d) {
             var dayMs = 86400000;
             return (Date.now() - (new Date(d.commit.author.date)).getTime() < dayMs);
         }).length;
-        
+
         var crossedFingerCount = _.reduce(this.state.data,
             function(count, commit) {
                 var lc = commit.commit.message.toLowerCase();
@@ -147,13 +147,13 @@ var GHWidget = React.createClass({
         changelog = _.reject(changelog, function(c) {
             return c === null;
         });
-        
+
         changelog = _.first(changelog, 5);
 
         return (
             <div className={styles.ghStyleClass.className}>
                 <WidgetContainer color={kaColors.testPrepDomainColor}>
-                    <ChangelistWidget changelog={changelog} 
+                    <ChangelistWidget changelog={changelog}
                         nRecent={recentCommitCount}/>
                 </WidgetContainer>
                 <WidgetContainer color={kaColors.humanitiesDomainColor}>
