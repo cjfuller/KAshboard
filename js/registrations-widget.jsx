@@ -4,6 +4,7 @@ var moment = require("moment-timezone");
 
 var styles = require("./style/registrations-widget-style.js");
 var WidgetContainer = require("./widget-container.jsx");
+var LoadingMessage = require("./loading-message.jsx");
 var kaColors = require("./style/ka-colors.js");
 var util = require("./util.js");
 
@@ -36,6 +37,7 @@ var RegistrationsWidget = React.createClass({
                                               secondsInMonth);
 
                 this.setState({
+                    loaded: true,
                     registrations: registrations,
                     registrationsPerSecond: registrationsPerSecond
                 });
@@ -52,6 +54,7 @@ var RegistrationsWidget = React.createClass({
 
     getInitialState: function() {
         return {
+            loaded: false,
             registrations: 0,
             imaginaryRegistrations: 0,
             registrationsPerSecond: 0
@@ -70,6 +73,11 @@ var RegistrationsWidget = React.createClass({
     },
 
     render: function() {
+        if (!this.state.loaded) {
+            return <WidgetContainer color={kaColors.economicsDomainColor}>
+                <LoadingMessage />
+            </WidgetContainer>;
+        }
         var totalRegistrations = Math.floor(
             this.state.registrations + this.state.imaginaryRegistrations);
         return (

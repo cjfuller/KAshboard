@@ -54,7 +54,7 @@ Render the `LoadingMessage` component (`loading-message.jsx`) if the widget
 content has not yet loaded.
 
 ```
-return <div>
+return <WidgetContainer>
     <LoadingMessage />
-</div>;
+</WidgetContainer>;
 ```

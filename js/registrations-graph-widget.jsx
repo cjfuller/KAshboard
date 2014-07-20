@@ -5,6 +5,7 @@ var _ = require("underscore");
 
 var LineGraph = require("./line-graph.jsx");
 var WidgetContainer = require("./widget-container.jsx");
+var LoadingMessage = require("./loading-message.jsx");
 var styleVars = require("./style/style-vars.js");
 var kaColors = require("./style/ka-colors.js");
 
@@ -47,6 +48,12 @@ var RegistrationsGraphWidget = React.createClass({
     },
 
     render: function() {
+        if (this.state.data.length === 0) {
+            return <WidgetContainer sizeClass="doubleWide"
+                color={kaColors.mathDomainColor}>
+                <LoadingMessage />
+            </WidgetContainer>;
+        }
         var series = [{
             name: "new registrations",
             type: "spline",
