@@ -32,10 +32,12 @@ var ErrorGraphWidget = React.createClass({
                     var errs = (v[5] && parseInt(v[5])/3600.0) || 0;
                     return {x: timeMs, y: parseInt(v[5])/3600.0};
                 });
+                // Omit first datapoint because it's incomplete. Assumes that
+                // the datapoints are in chronological order.
                 this.setState({
                     data: {
-                        client: series4xx,
-                        server: series5xx,
+                        client: _.rest(series4xx),
+                        server: _.rest(series5xx),
                     }
                 });
             }
