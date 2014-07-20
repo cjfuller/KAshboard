@@ -101,6 +101,9 @@ var ErrorGraphWidget = React.createClass({
                     styleVars.gridSpacing,
             },
             colors: [kaColors.csTopicColor, kaColors.economicsTopicColor],
+            legend: {
+                borderColor: "rgba(0,0,0,0)",
+            }
         }
         return (
             <WidgetContainer sizeClass="doubleWide">
