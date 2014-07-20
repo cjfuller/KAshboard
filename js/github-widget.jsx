@@ -8,7 +8,9 @@ var styles = require("./style/github-widget-style.js");
 var kaColors = require("./style/ka-colors.js");
 
 // Refresh rate, in milliseconds
-var INTERVAL_MS = 30000;
+// Rate limit for authenticated requests is 5000 requests/hour
+// 10 seconds => 360 requests/hour
+var INTERVAL_MS = 10000;
 
 var FingersCrossedWidget = React.createClass({
     render: function() {
