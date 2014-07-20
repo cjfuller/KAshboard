@@ -252,14 +252,14 @@ var bqDataset = "dashboard_stats";
 // Note that these results will be the response from bigquery and not the
 // actual computed results.
 var queryExec = function(query, destinationTable, callback) {
-    // Don't run a query more often than every 1 minute.
+    // Don't run a query more often than every 2 minutes.
     // This is needed so that quick-updating widgets don't spawn multiple
     // copies of the same query while waiting for the result.
     //
     // TODO(colin): actually save the prior job ID and see if the query is
     // active.
     if (lastQueryTimes[query] &&
-        moment().isBefore(lastQueryTimes[query].add('minutes', '1'))){
+        moment().isBefore(lastQueryTimes[query].add('minutes', '2'))){
         callback && callback("Querying too rapidly!", null);
         return;
     }
@@ -350,7 +350,7 @@ app.get('/error_counts', function(req, res) {
         GROUP BY code, time_bin\
     ";
     var requestId = tableName;
-    var hourMSec = 60*1000*1;//30*60*1000;
+    var hourMSec = 30*60*1000;
 
     var formatter = function(bqRes) {
         var errors = {};
