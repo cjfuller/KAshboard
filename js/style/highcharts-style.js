@@ -1,3 +1,5 @@
+var _ = require("underscore");
+
 var styleVars = require("./style-vars.js");
 var kaColors = require("./ka-colors.js");
 
@@ -20,7 +22,9 @@ var HighchartOptions = {
         style: defaultTextStyle
     },
     title: {
-        style: defaultTextStyle
+        style: _.defaults({
+            fontSize: "1.8em",
+        },defaultTextStyle),
     },
     legend: {
         style: defaultTextStyle,
@@ -43,7 +47,8 @@ var HighchartOptions = {
         },
         title: {
             style: defaultTextStyle
-        }
+        },
+        gridLineColor: "rgba(192, 192, 192, 0.2)",
     },
     plotOptions: {
         series: {

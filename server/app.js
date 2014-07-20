@@ -6,6 +6,7 @@ var express = require('express')
     , cors = require('cors')
     , app = express();
 
+var moment = require('moment-timezone');
 var _ = require('underscore');
 var fs = require('fs');
 
@@ -276,7 +277,6 @@ app.get('/registrations', function(req, res) {
         SELECT activity_month, registrations\
         FROM [latest_derived.company_goals]\
     ";
-    var date = req.params.date;
     var requestId = tableName;
     var twoDaysMSec = 60*60*24*2*1000;
     
@@ -308,5 +308,53 @@ app.get('/registrations', function(req, res) {
         }
     });
 });
+
+app.get('/error_counts', function(req, res) {
+    var tableName = "error_counts";
+    var rangeEnd = moment().format("'YYYY-MM-DD'");
+    var rangeStart = moment().subtract('days', 2).format("'YYYY-MM-DD'");
+    var query = "\
+        SELECT\
+            COUNT(1) AS error_count,\
+            INTEGER(FLOOR(status/100)) as code,\
+            INTEGER(FLOOR(start_time/1800)) as time_bin\
+        FROM TABLE_DATE_RANGE(logs.requestlogs_,\
+            TIMESTAMP(" + rangeStart + "), TIMESTAMP(" + rangeEnd + "))\
+        WHERE FLOOR(status/100) > 3\
+        GROUP BY code, time_bin\
+    ";
+    var requestId = tableName;
+    var halfHourMSec = 60*30*1000;
+
+    // yep, this looks like code written during a hackathon...
+    getLastTableUpdateTime(tableName, function(time) {
+        if (time &&
+            ((Date.now() - (new Date(parseInt(time))).getTime()) <
+              halfHourMSec)) {
+                  if (resultCache[requestId]) {
+                      res.send(resultCache[requestId]);
+                  } else {
+                      readResults(tableName, 100000, 0, function(err, bqRes) {
+                          if (err) {
+                              res.send({});
+                          } else {
+                              var errors = {};
+                              _.each(bqRes.rows, function(row) {
+                                  errors[row.f[2].v] =
+                                      errors[row.f[2].v] || {}
+                                  errors[row.f[2].v][row.f[1].v] = row.f[0].v;
+                              });
+                              resultCache[requestId] = {errors: errors};
+                              res.send(resultCache[requestId]);
+                          }
+                      });
+                  }
+        } else {
+            queryExec(query, tableName);
+            res.send({});
+        }
+    });
+});
+
 
 app.listen(3000);

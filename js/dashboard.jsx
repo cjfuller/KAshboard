@@ -13,6 +13,7 @@ var AtAllWidget = require("./at-all-widget.jsx");
 var HomeWidget = require("./home-widget.jsx");
 var RegistrationsWidget = require("./registrations-widget.jsx");
 var RegistrationsGraphWidget = require("./registrations-graph-widget.jsx");
+var ErrorGraphWidget = require("./error-graph-widget.jsx");
 
 var dashboardClass = require("./style/dashboard-style.js");
 
@@ -22,13 +23,12 @@ var Dashboard = React.createClass({
             <HomeWidget/>
             <GHMetaWidget/>
             <StoriesWidget />
+            <ErrorGraphWidget />
             <TeamWidget />
             <AtAllWidget />
+            <BigQueryWidget />
             <RegistrationsGraphWidget />
             <RegistrationsWidget />
-            <BigQueryWidget />
-            <GAWidget />
-
         </div>;
     }
 });
