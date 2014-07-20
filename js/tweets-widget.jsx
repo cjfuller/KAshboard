@@ -4,8 +4,9 @@ var React = require("react");
 var _ = require("underscore");
 
 var WidgetContainer = require("./widget-container.jsx");
-var style = require("./style/twitter-style.js");
+
 var kaColors = require("./style/ka-colors.js");
+var style = require("./style/twitter-style.js");
 
 // Refresh rate, in milliseconds
 var INTERVAL_MS = 30000;

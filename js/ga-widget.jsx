@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
+
 var React = require("react");
-var chartId = 'mychart';
+
 var LineGraph = require("./line-graph.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 

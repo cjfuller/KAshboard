@@ -1,6 +1,8 @@
-var React = require("react");
-var RCSS = require("rcss");
+/** @jsx React.DOM */
+
 var moment = require("moment-timezone");
+var RCSS = require("rcss");
+var React = require("react");
 var _ = require("underscore");
 
 var colors = require("./style/ka-colors.js");

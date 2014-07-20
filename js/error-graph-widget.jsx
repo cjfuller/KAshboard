@@ -1,11 +1,13 @@
 /** @jsx React.DOM */
-var React = require("react");
+
 var moment = require("moment-timezone");
+var React = require("react");
 var _ = require("underscore");
 
 var LineGraph = require("./line-graph.jsx");
-var WidgetContainer = require("./widget-container.jsx");
 var LoadingMessage = require("./loading-message.jsx");
+var WidgetContainer = require("./widget-container.jsx");
+
 var styleVars = require("./style/style-vars.js");
 var kaColors = require("./style/ka-colors.js");
 

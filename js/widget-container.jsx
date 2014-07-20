@@ -1,8 +1,11 @@
 /** @jsx React.DOM */
-var React = require("react");
+
 var RCSS = require("rcss");
-var widgetStyles = require("./style/widget-positioner.js");
+var React = require("react");
+
 var colors = require("./style/ka-colors.js");
+var widgetStyles = require("./style/widget-positioner.js");
+
 var WidgetContainer = React.createClass(
     {
         render: function() {

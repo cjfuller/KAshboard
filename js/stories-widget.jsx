@@ -3,9 +3,10 @@
 var React = require("react");
 
 var LoadingMessage = require("./loading-message.jsx");
-var styles = require("./style/stories-style.js");
 var WidgetContainer = require('./widget-container.jsx');
+
 var colors = require('./style/ka-colors.js');
+var styles = require("./style/stories-style.js");
 
 // Time to show each story, in milliseconds
 var INTERVAL_MS = 30000;

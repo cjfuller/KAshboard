@@ -1,11 +1,12 @@
 /** @jsx React.DOM */
 
-var React = require("react");
 var moment = require("moment-timezone");
+var React = require("react");
 
 var WidgetContainer = require('./widget-container.jsx');
-var styles = require("./style/at-all-style.js");
+
 var kaColors = require("./style/ka-colors.js");
+var styles = require("./style/at-all-style.js");
 
 
 // Refresh rate, in milliseconds

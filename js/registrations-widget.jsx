@@ -1,11 +1,13 @@
 /** @jsx React.DOM */
-var React = require("react");
-var moment = require("moment-timezone");
 
-var styles = require("./style/registrations-widget-style.js");
-var WidgetContainer = require("./widget-container.jsx");
+var moment = require("moment-timezone");
+var React = require("react");
+
 var LoadingMessage = require("./loading-message.jsx");
+var WidgetContainer = require("./widget-container.jsx");
+
 var kaColors = require("./style/ka-colors.js");
+var styles = require("./style/registrations-widget-style.js");
 var util = require("./util.js");
 
 var INTERVAL_MS = 10000;

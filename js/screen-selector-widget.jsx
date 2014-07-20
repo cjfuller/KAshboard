@@ -3,6 +3,7 @@
 var React = require("react");
 
 var WidgetContainer = require("./widget-container.jsx");
+
 var styles = require("./style/screen-selector-style.js");
 
 var ScreenSelectorWidget = React.createClass({

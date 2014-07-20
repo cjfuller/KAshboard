@@ -1,12 +1,15 @@
 /** @jsx React.DOM */
+
+var moment = require("moment-timezone");
+var RCSS = require("rcss");
 var React = require("react");
 var _ = require("underscore");
-var RCSS = require("rcss");
-var moment = require("moment-timezone");
+
 var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
-var styles = require("./style/github-widget-style.js");
+
 var kaColors = require("./style/ka-colors.js");
+var styles = require("./style/github-widget-style.js");
 
 // Refresh rate, in milliseconds
 // Rate limit for authenticated requests is 5000 requests/hour

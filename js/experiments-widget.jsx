@@ -1,12 +1,9 @@
-/**
- * @jsx React.DOM
- */
+/** @jsx React.DOM */
 
 var React = require('react');
 var WidgetContainer = require('./widget-container.jsx');
 
 var kaColors = require("./style/ka-colors.js");
-
 // TODO(tony): move this out into its own style file...
 var styles = require("./style/team-style.js");
 
