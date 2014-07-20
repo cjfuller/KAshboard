@@ -408,7 +408,7 @@ app.get('/recent_experiments', function(req, res) {
 app.get('/deploy', function(req, res) {
     var options = {
         hostname: 'jenkins.khanacademy.org',
-        path: '/job/deploy-via-multijob/lastBuild/api/json?pretty=true',
+        path: '/job/deploy-via-multijob/lastBuild/api/json',
         auth: secrets.jenkinsUserId + ':' + secrets.jenkinsAPIToken
     };
     http.get(options, function(response) {
