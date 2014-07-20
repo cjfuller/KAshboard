@@ -25,7 +25,7 @@ var https = require('https');
 var bqToken = JSON.parse(fs.readFileSync(
     "./server/.bigquery.v2.token", "utf8"));
 
-var oauth2Client = 
+var oauth2Client =
     new gapi.auth.OAuth2(bqToken.client_id, bqToken.client_secret, "");
 
 oauth2Client.credentials = {
@@ -55,7 +55,6 @@ app.get('/github', function(req, res){
 });
 
 // BigQuery stuff...
-// TODO(tony): prefix all this with "BQ" to avoid confusion
 
 // record last table update time, so we can update only occasionally
 
@@ -77,18 +76,7 @@ function getLastTableUpdateTime(table, callback) {
             }
         });
     }
-}
-
-//List tables
-app.get('/bq-list', function (req, res) {
-    gapi.discover('bigquery', 'v2').execute(function(err, client) {
-        var req = client.bigquery.datasets.list({
-            projectId: secrets.bqProjectId});
-        req.withAuthClient(oauth2Client).execute(function(err, results) {
-            res.send(results);
-        });        
-    });
-});
+};
 
 var bqDataset = "dashboard_stats";
 
@@ -279,10 +267,10 @@ app.get('/registrations', function(req, res) {
     ";
     var requestId = tableName;
     var twoDaysMSec = 60*60*24*2*1000;
-    
+
     // yep, this looks like code written during a hackathon...
     getLastTableUpdateTime(tableName, function(time) {
-        if (time && 
+        if (time &&
             ((Date.now() - (new Date(parseInt(time))).getTime()) <
               twoDaysMSec)) {
                   if (resultCache[requestId]) {
