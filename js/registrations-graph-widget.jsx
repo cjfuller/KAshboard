@@ -68,8 +68,10 @@ var RegistrationsGraphWidget = React.createClass({
             },
             chart: {
                 height: styleVars.baseComponentHeight(),
-                width: styleVars.baseComponentWidth() * 2 + styleVars.gridSpacing,
+                width: styleVars.baseComponentWidth() * 2 +
+                    styleVars.gridSpacing,
             },
+            colors: [kaColors.kaGreen],
         }
         return (
             <WidgetContainer sizeClass="doubleWide"
