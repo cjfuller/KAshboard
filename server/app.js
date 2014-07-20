@@ -6,6 +6,7 @@ var express = require('express')
     , cors = require('cors')
     , app = express();
 
+var _ = require('underscore');
 var fs = require('fs');
 
 // Enable CORS
@@ -58,8 +59,24 @@ app.get('/github', function(req, res){
 // record last table update time, so we can update only occasionally
 
 var tableUpdateTimes = {};
+var resultCache = {};
 
-//TODO(colin): implement the cache
+function getLastTableUpdateTime(table, callback) {
+    if (tableUpdateTimes[table]) {
+        callback(tableUpdateTimes[table]);
+    } else {
+        getTableInfo(table, function(err, res) {
+            if (err) {
+                callback(null);
+            } else {
+                var tableInfo = res;
+                //var tableInfo = JSON.parse(res);
+                tableUpdateTimes[table] = tableInfo.lastModifiedTime;
+                getLastTableUpdateTime(table, callback);
+            }
+        });
+    }
+}
 
 //List tables
 app.get('/bq-list', function (req, res) {
@@ -71,7 +88,6 @@ app.get('/bq-list', function (req, res) {
         });        
     });
 });
-
 
 var bqDataset = "dashboard_stats";
 
@@ -252,6 +268,47 @@ app.get('/stories', function(req, res) {
             res.send(JSON.parse(data));
         }
     );
+});
+
+app.get('/registrations/:date', function(req, res) {
+    //date should be YYYY-MM
+    var tableName = "registrations";
+    var query = "\
+        SELECT activity_month, registrations\
+        FROM [latest_derived.company_goals]\
+    ";
+    var date = req.params.date;
+    var requestId = tableName + "/" + date;
+    var twoDaysMSec = 60*60*24*2*1000;
+    
+    // yep, this looks like code written during a hackathon...
+    getLastTableUpdateTime(tableName, function(time) {
+        if (time && 
+            ((Date.now() - (new Date(parseInt(time))).getTime()) <
+              twoDaysMSec)) {
+                  if (resultCache[requestId]) {
+                      res.send(resultCache[requestId]);
+                  } else {
+                      readResults(tableName, 100000, 0, function(err, bqRes) {
+                          if (err) {
+                              res.send({});
+                          } else {
+                              var myRow = _.find(bqRes.rows, function(row) {
+                                  return (row.f[0].v === date);
+                              });
+                              var result = {
+                                  registrations: myRow.f[1].v,
+                              };
+                              resultCache[requestId] = result;
+                              res.send(result);
+                          }
+                      });
+                  }
+        } else {
+            queryExec(query, tableName);
+            res.send({});
+        }
+    });
 });
 
 app.listen(3000);
