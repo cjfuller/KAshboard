@@ -28,7 +28,18 @@ var Experiments = React.createClass({
     componentDidMount: function() {
         $.get('http://localhost:3000/recent_experiments',
             function(result) {
-                this.setState({experiments: result});
+                var filtered_results = [];
+                for (var i = 0; i < result.length; i++) {
+                    var exp = result[i];
+                    if (exp.description.length < 500
+                            // A hack for the hackathon
+                            && exp.description.substring(0, 4) != 'Know') {
+                        filtered_results.push(exp);
+                        console.log(exp);
+                    }
+                }
+
+                this.setState({experiments: filtered_results});
                 this.displayRandomExperiment();
                 this.interval = setInterval(this.displayRandomExperiment,
                                             INTERVAL_MS);
