@@ -17,7 +17,6 @@ var widgetColor = colors.mathDomainColor;
  * Cycles through the latest submitted stories on KA.
  *
  * Includes unpublished and private stories.
- * TODO(kevin): Refresh stories list every few minutes
  */
 StoriesWidget = React.createClass({
     getInitialState: function() {
