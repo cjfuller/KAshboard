@@ -10,6 +10,8 @@ var listStyle = {
 var containerStyle = {
     color: colors.grayExtraLight,
     paddingTop: "50px",
+    paddingLeft: "10px",
+    paddingRight: "10px",
 }
 
 var numberStyle = {

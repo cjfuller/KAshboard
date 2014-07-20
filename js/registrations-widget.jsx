@@ -13,10 +13,12 @@ var FingersCrossedWidget = React.createClass({
 
     getRegistrationCounts: function() {
         var thisMonth = moment().format("YYYY-MM");
-        var url = "http://localhost:3000/registrations/" + thisMonth;
+        var url = "http://localhost:3000/registrations";
         $.get(url, function(result) {
             if (result.registrations) {
-                this.setState(result);
+                this.setState({
+                    registrations: result.registrations[thisMonth],
+                });
             }
         }.bind(this));
     },
@@ -44,7 +46,7 @@ var FingersCrossedWidget = React.createClass({
                         {util.numberWithCommas(this.state.registrations)}
                     </div>
                     <div className={styles.caption.className}>
-                        number of registrations so far this month
+                        new registrations so far this month
                     </div>
                 </div>
             </WidgetContainer>

@@ -270,15 +270,14 @@ app.get('/stories', function(req, res) {
     );
 });
 
-app.get('/registrations/:date', function(req, res) {
-    //date should be YYYY-MM
+app.get('/registrations', function(req, res) {
     var tableName = "registrations";
     var query = "\
         SELECT activity_month, registrations\
         FROM [latest_derived.company_goals]\
     ";
     var date = req.params.date;
-    var requestId = tableName + "/" + date;
+    var requestId = tableName;
     var twoDaysMSec = 60*60*24*2*1000;
     
     // yep, this looks like code written during a hackathon...
@@ -293,14 +292,13 @@ app.get('/registrations/:date', function(req, res) {
                           if (err) {
                               res.send({});
                           } else {
-                              var myRow = _.find(bqRes.rows, function(row) {
-                                  return (row.f[0].v === date);
+                              var registrations = {};
+                              _.each(bqRes.rows, function(row) {
+                                  registrations[row.f[0].v] = row.f[1].v;
                               });
-                              var result = {
-                                  registrations: myRow.f[1].v,
-                              };
-                              resultCache[requestId] = result;
-                              res.send(result);
+                              resultCache[requestId] = {registrations:
+                                                          registrations};
+                              res.send(resultCache[requestId]);
                           }
                       });
                   }
