@@ -15,23 +15,37 @@ var RegistrationsWidget = require("./registrations-widget.jsx");
 var RegistrationsGraphWidget = require("./registrations-graph-widget.jsx");
 var ErrorGraphWidget = require("./error-graph-widget.jsx");
 var TweetsWidget = require("./tweets-widget.jsx");
+var ScreenSelectorWidget = require("./screen-selector-widget.jsx");
+var util = require("./util.js");
 
 var dashboardClass = require("./style/dashboard-style.js");
 
 var Dashboard = React.createClass({
     render: function() {
-        return <div className={dashboardClass.className}>
-            <HomeWidget/>
-            <GHMetaWidget/>
-            <StoriesWidget />
-            <TweetsWidget />
-            <TeamWidget />
-            <HipChatWidget />
-            <ErrorGraphWidget />
-            <RegistrationsGraphWidget />
-            <RegistrationsWidget />
-            <ExperimentsWidget />
-        </div>;
+        var screen = parseInt(util.getParameterByName("screen"));
+        switch (screen) {
+            case 0:
+                return <div className={dashboardClass.className}>
+                    <HomeWidget/>
+                    <GHMetaWidget/>
+                    <StoriesWidget />
+                    <TweetsWidget />
+                    <TeamWidget />
+                    <HipChatWidget />
+                    <ErrorGraphWidget />
+                    <RegistrationsGraphWidget />
+                    <RegistrationsWidget />
+                    <ExperimentsWidget />
+                </div>;
+            case 1:
+                return <div className={dashboardClass.className}>
+                </div>;
+            default:
+                return <div className={dashboardClass.className}>
+                    <ScreenSelectorWidget screen={0} />
+                    <ScreenSelectorWidget screen={1} />
+                </div>;
+        }
     }
 });
 
