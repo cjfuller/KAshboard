@@ -2,6 +2,7 @@
 var React = require("react");
 var _ = require("underscore");
 var RCSS = require("rcss");
+var moment = require("moment-timezone");
 var LoadingMessage = require("./loading-message.jsx");
 var WidgetContainer = require("./widget-container.jsx");
 var styles = require("./style/github-widget-style.js");
@@ -11,33 +12,61 @@ var kaColors = require("./style/ka-colors.js");
 // Rate limit for authenticated requests is 5000 requests/hour
 // 10 seconds => 360 requests/hour
 var INTERVAL_MS = 10000;
+var changeListColor = kaColors.testPrepDomainColor;
+var fingersColor = kaColors.humanitiesDomainColor;
 
 var FingersCrossedWidget = React.createClass({
     render: function() {
+        if (this.props.fingerCount === null) {
+            return (
+                <WidgetContainer color={fingersColor}>
+                    <LoadingMessage />
+                </WidgetContainer>
+            );
+        }
         return (
-            <div className={styles.ghStyleClass.className}>
-                <div className={styles.numberClass.className}>
-                    {this.props.fingerCount}
+            <WidgetContainer color={fingersColor}>
+                <div className={styles.ghStyleClass.className}>
+                    <div className={styles.numberClass.className}>
+                        {this.props.fingerCount}
+                    </div>
+                    <div className={styles.captionClass.className}>
+                        number of recent commits tested by crossing fingers
+                    </div>
                 </div>
-                <div className={styles.captionClass.className}>
-                    number of recent commits tested by crossing fingers
-                </div>
-            </div>
+            </WidgetContainer>
         );
     }
 })
+
+var GitCommit = React.createClass({
+    render: function() {
+        return (
+            <div key={this.props.commit.key}
+                 className={styles.listStyleClass.className}>
+
+                <strong>{this.props.commit.name}</strong>: {this.props.commit.text}
+            </div>
+        );
+    },
+});
 
 var ChangelistWidget = React.createClass({
     render: function() {
         var changeList = _.map(this.props.changelog, function(c) {
             return (
-                <div key={c.key} className={styles.listStyleClass.className}>
-                    <strong>{c.name}</strong>: {c.text}
-                </div>
+                <GitCommit commit={c} />
             );
         });
+        if (this.props.nRecent === null) {
+            return (
+                <WidgetContainer color={changeListColor}>
+                    <LoadingMessage />
+                </WidgetContainer>
+            );
+        }
         return (
-            <div>
+            <WidgetContainer color={changeListColor}>
                 <div className={styles.titleClass.className}>
                     Recent website changes
                 </div>
@@ -45,14 +74,14 @@ var ChangelistWidget = React.createClass({
                     {changeList}
                     <strong>+{this.props.nRecent} more</strong>
                 </div>
-            </div>
+            </WidgetContainer>
         );
-    }
+    },
 });
 
 var GHWidget = React.createClass({
     getInitialState: function() {
-        return {data: []};
+        return {};
     },
     getCommitData: function() {
         $.ajax({
@@ -108,57 +137,65 @@ var GHWidget = React.createClass({
 
 
     },
-    render: function() {
-        if (this.state.data.length === 0) {
-            return <div className={styles.ghStyleClass.className}>
-                <WidgetContainer><LoadingMessage /></WidgetContainer>
-                <WidgetContainer><LoadingMessage /></WidgetContainer>
-            </div>;
+
+    changelog: function() {
+        var changes = _.map(this.state.data, function(c) {
+            return this.extractChanges(c);
+        }.bind(this));
+
+        changes = _.reject(changes, function(c) {
+            return c === null;
+        });
+
+        return _.first(changes, 5);
+    },
+
+    recentCommitCount: function() {
+        if (this.state.data === undefined) {
+            return null;
         }
-
-        var changelog = _.map(this.state.data, function(c) {
-                return this.extractChanges(c);
-            }.bind(this));
-
-        var recentCommitCount = _.filter(this.state.data, function(d) {
+        _.filter(this.state.data, function(d) {
             var dayMs = 86400000;
-            return (Date.now() - (new Date(d.commit.author.date)).getTime() < dayMs);
+            return (moment().subtract('1', 'day')
+                    .isBefore(moment(d.commit.author.date)));
         }).length;
+    },
 
-        var crossedFingerCount = _.reduce(this.state.data,
+    crossedFingerCount: function() {
+        if (this.state.data === undefined) {
+            return null;
+        }
+        var crossedFingersMessages = [
+            "cross fingers",
+            "crossed fingers",
+            "fingers crossed",
+            "squint"
+        ];
+        var testPlan = "test plan:";
+
+        var didCrossFingers = function(message) {
+            return _.any(crossedFingersMessages, function(cfm) {
+                return message.match(testPlan + ".*" + cfm);
+            });
+        };
+
+        return _.reduce(this.state.data,
             function(count, commit) {
                 var lc = commit.commit.message.toLowerCase();
-                var crossedFingersMessages = [
-                    "cross fingers",
-                    "crossed fingers",
-                    "fingers crossed",
-                    "squint"
-                ];
-                var testPlan = "test plan:";
-                if (_.any(crossedFingersMessages, function(m) {
-                    return lc.match(testPlan + ".*" + m);
-                })) {
+                if (didCrossFingers(lc)) {
                     return count + 1;
                 } else {
                     return count;
                 }
             }, 0);
+    },
 
-        changelog = _.reject(changelog, function(c) {
-            return c === null;
-        });
-
-        changelog = _.first(changelog, 5);
-
+    render: function() {
         return (
             <div className={styles.ghStyleClass.className}>
-                <WidgetContainer color={kaColors.testPrepDomainColor}>
-                    <ChangelistWidget changelog={changelog}
-                        nRecent={recentCommitCount}/>
-                </WidgetContainer>
-                <WidgetContainer color={kaColors.humanitiesDomainColor}>
-                    <FingersCrossedWidget fingerCount={crossedFingerCount}/>
-                </WidgetContainer>
+                <ChangelistWidget changelog={this.changelog()}
+                                  nRecent={this.recentCommitCount()} />
+                <FingersCrossedWidget fingerCount={this.crossedFingerCount()} />
             </div>
         );
     },
