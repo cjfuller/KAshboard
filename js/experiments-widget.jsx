@@ -11,7 +11,7 @@ var styles = require("./style/team-style.js");
 var INTERVAL_MS = 10000;
 var widgetColor = kaColors.csDomainColor;
 
-var Experiments = React.createClass({
+var ExperimentsWidget = React.createClass({
 
     getInitialState: function() {
         return {
@@ -76,4 +76,4 @@ var Experiments = React.createClass({
     }
 });
 
-module.exports = Experiments;
+module.exports = ExperimentsWidget;
