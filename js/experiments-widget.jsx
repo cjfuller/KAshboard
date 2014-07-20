@@ -33,9 +33,9 @@ var Experiments = React.createClass({
                     var exp = result[i];
                     if (exp.description.length < 500
                             // A hack for the hackathon
-                            && exp.description.substring(0, 4) != 'Know') {
+                            && exp.description.substring(1, 5) !== 'Know') {
                         filtered_results.push(exp);
-                        console.log(exp);
+                        console.log(exp.description.substring(0, 4));
                     }
                 }
 
