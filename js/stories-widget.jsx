@@ -51,9 +51,7 @@ StoriesWidget = React.createClass({
     },
 
     componentWillUnmount: function() {
-        if (typeof this.interval !== "undefined") {
-            clearInterval(this.interval);
-        }
+        clearInterval(this.interval);
     },
 
     truncateStory: function(story) {

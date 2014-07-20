@@ -24,6 +24,10 @@ var DeployWidget = React.createClass({
         this.interval = setInterval(this.getLastBuild, INTERVAL_MS);
     },
 
+    componentWillUnmount: function() {
+        clearInterval(this.interval);
+    },
+
     render: function() {
         var build = this.state.build;
         if (typeof build.result === "undefined") {

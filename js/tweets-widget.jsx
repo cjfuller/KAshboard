@@ -58,6 +58,10 @@ var TweetsWidget = React.createClass({
         this.interval = setInterval(this.refreshTweets, INTERVAL_MS);
     },
 
+    componentWillUnmount: function() {
+        clearInterval(this.interval);
+    },
+
     render: function() {
         if (typeof this.state.tweets.statuses !== 'object') {
             return <WidgetContainer color={widgetColor} sizeClass="doubleTall">
