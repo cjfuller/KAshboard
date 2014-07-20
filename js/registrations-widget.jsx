@@ -39,8 +39,13 @@ var RegistrationsWidget = React.createClass({
                                               secondsInMonth);
 
                 // Find last Saturday, midnight Pacific time.
+                // Use the previous one if the reports pipeline hasn't run yet
+                // (Monday AM).
                 var backupDay = moment().clone().tz("America/Los_Angeles");
                 backupDay = backupDay.startOf("week").subtract("day", 1);
+                if (now.day() === 0) {
+                    backupDay = backupDay.subtract("week", 1);
+                }
 
                 var imaginaryRegistrations = registrationsPerSecond *
                     (now.valueOf() - backupDay.valueOf())/1000;
