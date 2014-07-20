@@ -45,9 +45,7 @@ var FingersCrossedWidget = React.createClass({
 var GitCommit = React.createClass({
     render: function() {
         return (
-            <div key={this.props.commit.key}
-                 className={styles.listStyleClass.className}>
-
+            <div className={styles.listStyleClass.className}>
                 <strong>{this.props.commit.name}</strong>: {this.props.commit.text}
             </div>
         );
@@ -58,7 +56,7 @@ var ChangelistWidget = React.createClass({
     render: function() {
         var changeList = _.map(this.props.changelog, function(c) {
             return (
-                <GitCommit commit={c} />
+                <GitCommit commit={c} key={c.key}/>
             );
         });
         if (this.props.nRecent === null) {
