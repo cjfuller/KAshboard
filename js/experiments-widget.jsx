@@ -46,13 +46,11 @@ var Experiments = React.createClass({
         }
 
         var exp = this.state.experiments[this.state.idx];
-        return (<div>
-                <WidgetContainer>
+        return (<WidgetContainer>
                     <div>
                     {exp.display_name}
                     </div>
-                </WidgetContainer>
-            </div>
+            </WidgetContainer>
         );
     }
 });
