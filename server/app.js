@@ -317,20 +317,19 @@ app.get('/error_counts', function(req, res) {
         SELECT\
             COUNT(1) AS error_count,\
             INTEGER(FLOOR(status/100)) as code,\
-            INTEGER(FLOOR(start_time/1800)) as time_bin\
+            INTEGER(FLOOR(start_time/3600)) as time_bin\
         FROM TABLE_DATE_RANGE(logs.requestlogs_,\
             TIMESTAMP(" + rangeStart + "), TIMESTAMP(" + rangeEnd + "))\
         WHERE FLOOR(status/100) > 3\
         GROUP BY code, time_bin\
     ";
     var requestId = tableName;
-    var halfHourMSec = 60*30*1000;
+    var hourMSec = 30*60*1000;
 
     // yep, this looks like code written during a hackathon...
     getLastTableUpdateTime(tableName, function(time) {
         if (time &&
-            ((Date.now() - (new Date(parseInt(time))).getTime()) <
-              halfHourMSec)) {
+            ((Date.now() - (new Date(parseInt(time))).getTime()) < hourMSec)) {
                   if (resultCache[requestId]) {
                       res.send(resultCache[requestId]);
                   } else {

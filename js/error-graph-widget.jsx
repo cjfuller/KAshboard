@@ -16,18 +16,18 @@ var ErrorGraphWidget = React.createClass({
         $.get(url, function(result) {
             if (result) {
                 var series4xx = _.map(result.errors, function(v, k) {
-                    // k is a time in sec/1800
+                    // k is a time in hours
                     // highcharts expects times in ms
-                    var timeMs = k*1800*1000;
-                    var errs = (v[4] && parseInt(v[4])/1800.0) || 0;
+                    var timeMs = k*3600*1000;
+                    var errs = (v[4] && parseInt(v[4])/3600.0) || 0;
                     return {x: timeMs, y: errs};
                 });
                 var series5xx = _.map(result.errors, function(v, k) {
                     // k is a time in sec/1800
                     // highcharts expects times in ms
-                    var timeMs = k*1800*1000;
-                    var errs = (v[5] && parseInt(v[5])/1800.0) || 0;
-                    return {x: timeMs, y: parseInt(v[5])/1800.0};
+                    var timeMs = k*3600*1000;
+                    var errs = (v[5] && parseInt(v[5])/3600.0) || 0;
+                    return {x: timeMs, y: parseInt(v[5])/3600.0};
                 });
                 var data = {
                     client: series4xx,
