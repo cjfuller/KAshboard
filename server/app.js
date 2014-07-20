@@ -54,82 +54,6 @@ app.get('/github', function(req, res){
     });
 });
 
-// BigQuery stuff...
-
-// record last table update time, so we can update only occasionally
-
-var tableUpdateTimes = {};
-var resultCache = {};
-
-function getLastTableUpdateTime(table, callback) {
-    if (tableUpdateTimes[table]) {
-        callback(tableUpdateTimes[table]);
-    } else {
-        getTableInfo(table, function(err, res) {
-            if (err) {
-                callback(null);
-            } else {
-                var tableInfo = res;
-                //var tableInfo = JSON.parse(res);
-                tableUpdateTimes[table] = tableInfo.lastModifiedTime;
-                getLastTableUpdateTime(table, callback);
-            }
-        });
-    }
-};
-
-var bqDataset = "dashboard_stats";
-
-// Execute a query
-// Sends err, results to the provided callback [optional].
-// Note that these results will be the response from bigquery and not the
-// actual computed results.
-var queryExec = function(query, destinationTable, callback) {
-    var dataset = bqDataset;
-    gapi.discover('bigquery', 'v2').execute(function(err, client) {
-        var req = client.bigquery.jobs.insert({
-           projectId: secrets.bqProjectId});
-        req.body = {
-            projectId: secrets.bqProjectId,
-            configuration: {
-                query: {
-                    destinationTable: {
-                        projectId: secrets.bqProjectId,
-                        tableId: destinationTable,
-                        datasetId: dataset,
-                    },
-                    writeDisposition: "WRITE_TRUNCATE",
-                    query: query,
-                }
-            }
-        };
-        req.withAuthClient(oauth2Client).execute(callback);
-    });
-};
-
-var readResults = function(sourceTable, maxResults, start, callback) {
-    gapi.discover('bigquery', 'v2').execute(function(err, client) {
-        var req = client.bigquery.tabledata.list({
-           projectId: secrets.bqProjectId,
-           datasetId: bqDataset,
-           tableId: sourceTable,
-           maxResults: maxResults,
-           startIndex: start,
-        });
-        req.withAuthClient(oauth2Client).execute(callback);
-    });
-};
-
-var getTableInfo = function(table, callback) {
-    gapi.discover('bigquery', 'v2').execute(function(err, client) {
-        var req = client.bigquery.tables.get({
-           projectId: secrets.bqProjectId,
-           datasetId: bqDataset,
-           tableId: table,
-        });
-        req.withAuthClient(oauth2Client).execute(callback);
-    });
-};
 
 // Get everyone on the team page
 app.get('/team', function(req, res) {
@@ -260,6 +184,133 @@ app.get('/stories', function(req, res) {
     );
 });
 
+// BigQuery stuff...
+
+// record last table update time, so we can update only occasionally
+
+var tableUpdateTimes = {};
+var lastQueryTimes = {};
+var resultCache = {};
+
+function isStale(updateTime, expiryIntervalMs) {
+    return (!updateTime ||
+            moment(updateTime).isBefore(
+                moment().subtract('ms', expiryIntervalMs)));
+}
+
+function refreshStaleTablesAndCall(tablename, expiryTimeMs, query, func) {
+    var lastUpdateTime = null;
+    var afterUpdateTimeIsKnown = function(time) {
+        if (isStale(time, expiryTimeMs)) {
+            queryExec(query, tablename);
+            tableUpdateTimes[tablename] = undefined;
+            func();
+        } else {
+            func();
+        }
+    };
+
+    if (tableUpdateTimes[tablename]) {
+        afterUpdateTimeIsKnown(tableUpdateTimes[tablename]);
+    } else {
+        getTableInfo(tablename, function(err, res) {
+           if(err) {
+               afterUpdateTimeIsKnown(null);
+           } else {
+               // Invalidate all caches if we're modifying the table update time
+               resultCache[tablename] = {};
+               var tableInfo = res;
+               tableUpdateTimes[tablename] =
+                   parseInt(tableInfo.lastModifiedTime);
+               afterUpdateTimeIsKnown(tableUpdateTimes[tablename]);
+           }
+        });
+    }
+}
+
+function readCachedOrFetchResults(tableName, requestId, res, formatter) {
+    resultCache[tableName] = resultCache[tableName] || {};
+    if (resultCache[tableName][requestId]) {
+        res.send(resultCache[tableName][requestId]);
+    } else {
+        readResults(tableName, 100000, 0, function(err, bqRes) {
+            if (err) {
+                res.send({});
+            } else {
+                var result = formatter(bqRes);
+                resultCache[tableName][requestId] = result;
+                res.send(resultCache[tableName][requestId]);
+            }
+        });
+    }
+};
+
+var bqDataset = "dashboard_stats";
+
+// Execute a query
+// Sends err, results to the provided callback [optional].
+// Note that these results will be the response from bigquery and not the
+// actual computed results.
+var queryExec = function(query, destinationTable, callback) {
+    // Don't run a query more often than every 1 minute.
+    // This is needed so that quick-updating widgets don't spawn multiple
+    // copies of the same query while waiting for the result.
+    //
+    // TODO(colin): actually save the prior job ID and see if the query is
+    // active.
+    if (lastQueryTimes[query] &&
+        moment().isBefore(lastQueryTimes[query].add('minutes', '1'))){
+        callback && callback("Querying too rapidly!", null);
+        return;
+    }
+    lastQueryTimes[query] = moment();
+
+    var dataset = bqDataset;
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.jobs.insert({
+           projectId: secrets.bqProjectId});
+        req.body = {
+            projectId: secrets.bqProjectId,
+            configuration: {
+                query: {
+                    destinationTable: {
+                        projectId: secrets.bqProjectId,
+                        tableId: destinationTable,
+                        datasetId: dataset,
+                    },
+                    writeDisposition: "WRITE_TRUNCATE",
+                    query: query,
+                }
+            }
+        };
+        req.withAuthClient(oauth2Client).execute(callback);
+    });
+};
+
+var readResults = function(sourceTable, maxResults, start, callback) {
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.tabledata.list({
+           projectId: secrets.bqProjectId,
+           datasetId: bqDataset,
+           tableId: sourceTable,
+           maxResults: maxResults,
+           startIndex: start,
+        });
+        req.withAuthClient(oauth2Client).execute(callback);
+    });
+};
+
+var getTableInfo = function(table, callback) {
+    gapi.discover('bigquery', 'v2').execute(function(err, client) {
+        var req = client.bigquery.tables.get({
+           projectId: secrets.bqProjectId,
+           datasetId: bqDataset,
+           tableId: table,
+        });
+        req.withAuthClient(oauth2Client).execute(callback);
+    });
+};
+
 app.get('/registrations', function(req, res) {
     var tableName = "registrations";
     var query = "\
@@ -269,33 +320,19 @@ app.get('/registrations', function(req, res) {
     var requestId = tableName;
     var twoDaysMSec = 60*60*24*2*1000;
 
-    // yep, this looks like code written during a hackathon...
-    getLastTableUpdateTime(tableName, function(time) {
-        if (time &&
-            ((Date.now() - (new Date(parseInt(time))).getTime()) <
-              twoDaysMSec)) {
-                  if (resultCache[requestId]) {
-                      res.send(resultCache[requestId]);
-                  } else {
-                      readResults(tableName, 100000, 0, function(err, bqRes) {
-                          if (err) {
-                              res.send({});
-                          } else {
-                              var registrations = {};
-                              _.each(bqRes.rows, function(row) {
-                                  registrations[row.f[0].v] = row.f[1].v;
-                              });
-                              resultCache[requestId] = {registrations:
-                                                          registrations};
-                              res.send(resultCache[requestId]);
-                          }
-                      });
-                  }
-        } else {
-            queryExec(query, tableName);
-            res.send({});
-        }
-    });
+    var formatter = function(bqRes){
+        var registrations = {};
+        _.each(bqRes.rows, function(row) {
+            registrations[row.f[0].v] = row.f[1].v;
+        });
+        return {registrations: registrations};
+    };
+
+    var resultFunc = function() {
+        readCachedOrFetchResults(tableName, requestId, res, formatter);
+    };
+
+    refreshStaleTablesAndCall(tableName, twoDaysMSec, query, resultFunc);
 });
 
 app.get('/error_counts', function(req, res) {
@@ -313,35 +350,22 @@ app.get('/error_counts', function(req, res) {
         GROUP BY code, time_bin\
     ";
     var requestId = tableName;
-    var hourMSec = 30*60*1000;
+    var hourMSec = 60*1000*1;//30*60*1000;
 
-    // yep, this looks like code written during a hackathon...
-    getLastTableUpdateTime(tableName, function(time) {
-        if (time &&
-            ((Date.now() - (new Date(parseInt(time))).getTime()) < hourMSec)) {
-                  if (resultCache[requestId]) {
-                      res.send(resultCache[requestId]);
-                  } else {
-                      readResults(tableName, 100000, 0, function(err, bqRes) {
-                          if (err) {
-                              res.send({});
-                          } else {
-                              var errors = {};
-                              _.each(bqRes.rows, function(row) {
-                                  errors[row.f[2].v] =
-                                      errors[row.f[2].v] || {}
-                                  errors[row.f[2].v][row.f[1].v] = row.f[0].v;
-                              });
-                              resultCache[requestId] = {errors: errors};
-                              res.send(resultCache[requestId]);
-                          }
-                      });
-                  }
-        } else {
-            queryExec(query, tableName);
-            res.send({});
-        }
-    });
+    var formatter = function(bqRes) {
+        var errors = {};
+        _.each(bqRes.rows, function(row) {
+            errors[row.f[2].v] = errors[row.f[2].v] || {};
+            errors[row.f[2].v][row.f[1].v] = row.f[0].v;
+        });
+        return {errors: errors};
+    };
+
+    var resultFunc = function() {
+        readCachedOrFetchResults(tableName, requestId, res, formatter);
+    };
+
+    refreshStaleTablesAndCall(tableName, hourMSec, query, resultFunc);
 });
 
 
