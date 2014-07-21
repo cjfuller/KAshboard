@@ -35,9 +35,9 @@ var Tweet = React.createClass({
                     (@{tweet.user.screen_name})
                 </div>
             </div>
-            <div className={style.tweet.className}>
-                {tweet.text}
-            </div>
+            <div
+                className={style.tweet.className}
+                dangerouslySetInnerHTML={{__html: tweet.text}} />
         </div>;
     }
 });
